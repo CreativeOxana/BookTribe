@@ -128,7 +128,7 @@ export const BookInfoSearch = () => {
             sm: "repeat(2, 1fr)",
             md: "repeat(3, 1fr)",
             lg: "repeat(4, 1fr)",
-            xl: "repeat(5, 1fr)", // 5 knih na velkých obrazovkách
+            xl: "repeat(5, 1fr)",
           },
           gap: 3,
           justifyItems: "center",
@@ -138,7 +138,7 @@ export const BookInfoSearch = () => {
           <Box key={book.key || index} sx={{ width: "100%", maxWidth: 280 }}>
             <Card
               sx={{
-                height: 550, // Větší výška pro více detailů
+                height: 550,
                 width: "100%",
                 display: "flex",
                 flexDirection: "column",
@@ -149,10 +149,10 @@ export const BookInfoSearch = () => {
                 },
               }}
             >
-              {/* Obrázek knihy - fixní velikost */}
+              {/* Obrázek knihy */}
               <Box
                 sx={{
-                  height: 300, // Fixní výška pro všechny obrázky
+                  height: 300,
                   width: "100%",
                   display: "flex",
                   justifyContent: "center",
@@ -182,7 +182,7 @@ export const BookInfoSearch = () => {
                 />
               </Box>
 
-              {/* Detaily knihy - zbývající prostor */}
+              {/* Detaily knihy */}
               <CardContent
                 sx={{
                   flexGrow: 1,
@@ -190,7 +190,7 @@ export const BookInfoSearch = () => {
                   display: "flex",
                   flexDirection: "column",
                   justifyContent: "space-between",
-                  height: 250, // Fixní výška pro obsah
+                  height: 250,
                   overflow: "hidden",
                 }}
               >

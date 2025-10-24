@@ -1,18 +1,6 @@
 "use client";
 import { Container, Typography } from "@mui/material";
-import dynamic from "next/dynamic";
-
-// Dynamicky načteme BookList komponentu
-const BookList = dynamic(
-  () =>
-    import("@/components/book-list/BookList").then((mod) => ({
-      default: mod.BookList,
-    })),
-  {
-    loading: () => <Typography textAlign="center">Načítám knihy...</Typography>,
-    ssr: false,
-  }
-);
+import { BookList } from "@/components/book-list/BookList";
 
 export default function Home() {
   return (

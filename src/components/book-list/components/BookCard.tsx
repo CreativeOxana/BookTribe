@@ -4,7 +4,7 @@ import { Typography, Card, Box, CardContent, CardMedia } from "@mui/material";
 
 type Props = {
   book: BookDetail;
-  onClick?: () => void; // Volitelný onClick handler
+  onClick?: () => void;
 };
 
 export const BookCard = ({ book, onClick }: Props) => {
@@ -17,9 +17,9 @@ export const BookCard = ({ book, onClick }: Props) => {
   return (
     <Card
       sx={{
-        height: 350, // Fixní výška pro grid
+        height: 350,
         width: "100%",
-        maxWidth: 250, // Maximální šířka pro grid
+        maxWidth: 250,
         display: "flex",
         flexDirection: "column",
         cursor: onClick ? "pointer" : "default",
@@ -67,7 +67,6 @@ export const BookCard = ({ book, onClick }: Props) => {
         />
       </Box>
 
-      {/* Kompaktní obsah */}
       <CardContent
         sx={{
           flexGrow: 1,
@@ -75,7 +74,7 @@ export const BookCard = ({ book, onClick }: Props) => {
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
-          height: 150, // Fixní výška pro obsah
+          height: 150,
           overflow: "hidden",
         }}
       >
