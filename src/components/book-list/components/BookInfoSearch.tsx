@@ -36,7 +36,7 @@ export const BookInfoSearch = () => {
         console.log("� Načítám detaily pro 5 knih pomocí fetchDetail...");
 
         // Načteme detaily pro každé ISBN pomocí fetchDetail
-        const detailsPromises = popularISBNs.map(async (isbn: number) => {
+        const detailsPromises = popularISBNs.map(async (isbn: string) => {
           try {
             console.log(`📚 Načítám knihu s ISBN: ${isbn}`);
             const detailResponse = await fetchDetail(isbn);
@@ -135,7 +135,7 @@ export const BookInfoSearch = () => {
         }}
       >
         {booksDetails.map((book, index) => (
-          <Box key={book.key || index} sx={{ width: "100%", maxWidth: 280 }}>
+          <Box key={book.id || index} sx={{ width: "100%", maxWidth: 280 }}>
             <Card
               sx={{
                 height: 550,

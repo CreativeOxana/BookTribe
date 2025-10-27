@@ -1,6 +1,6 @@
 import { BookDetailResponse } from "@/types/types";
 
-export const fetchDetail = async (isbn: number) => {
+export const fetchDetail = async (isbn: string) => {
   const response = await fetch(
     `https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&format=json&jscmd=data`
   );

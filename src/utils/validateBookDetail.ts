@@ -25,7 +25,7 @@ export const validateBookDetail = (
       cover: bookData.cover,
       identifiers: bookData.identifiers,
       language: bookData.language,
-      key: bookData.key,
+      id: bookData.identifiers?.isbn_13.toString(),
     };
 
     return convertedBook;

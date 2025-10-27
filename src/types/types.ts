@@ -38,10 +38,17 @@ export type BookDetail = {
     openlibrary?: string[];
   };
   language?: string[];
-  key: string;
+  id: string;
   url?: string;
-  ebooks?: { [key: string]: any };
-  excerpts?: { [key: string]: any };
 };
 
 export type BookDetailResponse = Record<string, BookDetail>;
+
+export type UserBookRow = {
+  id: string;
+  isRead: boolean;
+};
+
+export type Book = UserBookRow & {
+  detail: BookDetail;
+};

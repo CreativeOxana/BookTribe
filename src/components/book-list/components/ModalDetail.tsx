@@ -17,19 +17,19 @@ import {
   Button,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import { BookDetail } from "@/types/types";
+import { Book } from "@/types/types";
 import { useState } from "react";
 
 interface ModalDetailProps {
   dialogOpen: boolean;
   handleCloseDialog: () => void;
-  selectedBook: BookDetail | null;
+  book: Book;
 }
 
 export const ModalDetail = ({
   dialogOpen,
   handleCloseDialog,
-  selectedBook,
+  book: { detail },
 }: ModalDetailProps) => {
   const [isRead, setIsRead] = useState(false);
   const [review, setReview] = useState("");
@@ -53,7 +53,7 @@ export const ModalDetail = ({
     if (review.trim()) {
       setIsReviewSaved(true);
       // Zde by se mohla recenze uložit do localStorage nebo databáze
-      console.log(`Recenze uložena pro knihu ${selectedBook?.title}:`, review);
+      console.log(`Recenze uložena pro knihu ${detail?.title}:`, review);
     }
   };
 
@@ -78,7 +78,7 @@ export const ModalDetail = ({
           </Box>
         </DialogTitle>
         <DialogContent>
-          {selectedBook && (
+          {detail && (
             <Card sx={{ boxShadow: 0 }}>
               <Box
                 sx={{
@@ -106,56 +106,56 @@ export const ModalDetail = ({
                       borderRadius: 1,
                     }}
                     image={
-                      selectedBook.cover?.large ||
-                      selectedBook.cover?.medium ||
-                      selectedBook.cover?.small ||
+                      detail.cover?.large ||
+                      detail.cover?.medium ||
+                      detail.cover?.small ||
                       "https://via.placeholder.com/300x400/e0e0e0/757575?text=📚"
                     }
-                    alt={selectedBook.title}
+                    alt={detail.title}
                   />
                 </Box>
                 <Box sx={{ flex: 1 }}>
                   <CardContent sx={{ p: 3 }}>
                     <Stack spacing={2}>
-                      <Typography variant="h4">{selectedBook.title}</Typography>
+                      <Typography variant="h4">{detail.title}</Typography>
                       <Divider />
-                      {selectedBook.authors && (
+                      {detail.authors && (
                         <Box>
                           <Typography variant="subtitle1" fontWeight="bold">
                             Autor:
                           </Typography>
                           <Typography variant="body1">
-                            {selectedBook.authors.name}
+                            {detail.authors.name}
                           </Typography>
                         </Box>
                       )}
-                      {selectedBook.publishers && (
+                      {detail.publishers && (
                         <Box>
                           <Typography variant="subtitle1" fontWeight="bold">
                             Vydavatel:
                           </Typography>
                           <Typography variant="body1">
-                            {selectedBook.publishers.name}
+                            {detail.publishers.name}
                           </Typography>
                         </Box>
                       )}
-                      {selectedBook.publish_date && (
+                      {detail.publish_date && (
                         <Box>
                           <Typography variant="subtitle1" fontWeight="bold">
                             Datum vydání:
                           </Typography>
                           <Typography variant="body1">
-                            {selectedBook.publish_date}
+                            {detail.publish_date}
                           </Typography>
                         </Box>
                       )}
-                      {selectedBook.number_of_pages && (
+                      {detail.number_of_pages && (
                         <Box>
                           <Typography variant="subtitle1" fontWeight="bold">
                             Počet stran:
                           </Typography>
                           <Typography variant="body1">
-                            {selectedBook.number_of_pages}
+                            {detail.number_of_pages}
                           </Typography>
                         </Box>
                       )}
