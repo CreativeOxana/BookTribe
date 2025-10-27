@@ -31,7 +31,7 @@ const defaultUserBookRows: Record<string, UserBookRow> = {
 
 export default function Home() {
   const [userBookRows, setUserBookRows] =
-    useState<Record<number, UserBookRow>>(defaultUserBookRows);
+    useState<Record<string, UserBookRow>>(defaultUserBookRows);
   console.log("🚀 ~ Home ~ userBookRows:", userBookRows);
   const booklist = Object.keys(userBookRows);
   const { bookDetails, loading, error } = useBookDetails(booklist);

@@ -134,162 +134,174 @@ export const BookInfoSearch = () => {
           justifyItems: "center",
         }}
       >
-        {booksDetails.map((book, index) => (
-          <Box key={book.id || index} sx={{ width: "100%", maxWidth: 280 }}>
-            <Card
-              sx={{
-                height: 550,
-                width: "100%",
-                display: "flex",
-                flexDirection: "column",
-                transition: "transform 0.2s, box-shadow 0.2s",
-                "&:hover": {
-                  transform: "translateY(-4px)",
-                  boxShadow: 4,
-                },
-              }}
-            >
-              {/* Obrázek knihy */}
-              <Box
+        {booksDetails.map((book, index) => {
+          const {
+            id,
+            title,
+            cover,
+            authors,
+            publish_date,
+            publishers,
+            number_of_pages,
+            identifiers,
+          } = book;
+          return (
+            <Box key={id || index} sx={{ width: "100%", maxWidth: 280 }}>
+              <Card
                 sx={{
-                  height: 300,
+                  height: 550,
                   width: "100%",
                   display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  p: 2,
-                  backgroundColor: "#f8f9fa",
-                  borderBottom: "1px solid #e9ecef",
-                }}
-              >
-                <CardMedia
-                  component="img"
-                  sx={{
-                    width: "auto",
-                    height: "100%",
-                    maxWidth: "100%",
-                    objectFit: "contain",
-                    borderRadius: 1,
-                    boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-                  }}
-                  image={
-                    book.cover?.large ||
-                    book.cover?.medium ||
-                    book.cover?.small ||
-                    "https://via.placeholder.com/200x280/e0e0e0/757575?text=📚+No+Cover"
-                  }
-                  alt={book.title}
-                />
-              </Box>
-
-              {/* Detaily knihy */}
-              <CardContent
-                sx={{
-                  flexGrow: 1,
-                  p: 2,
-                  display: "flex",
                   flexDirection: "column",
-                  justifyContent: "space-between",
-                  height: 250,
-                  overflow: "hidden",
+                  transition: "transform 0.2s, box-shadow 0.2s",
+                  "&:hover": {
+                    transform: "translateY(-4px)",
+                    boxShadow: 4,
+                  },
                 }}
               >
-                <Box>
-                  <Typography
-                    variant="h6"
-                    component="h4"
-                    gutterBottom
+                {/* Obrázek knihy */}
+                <Box
+                  sx={{
+                    height: 300,
+                    width: "100%",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    p: 2,
+                    backgroundColor: "#f8f9fa",
+                    borderBottom: "1px solid #e9ecef",
+                  }}
+                >
+                  <CardMedia
+                    component="img"
                     sx={{
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                      display: "-webkit-box",
-                      WebkitLineClamp: 2,
-                      WebkitBoxOrient: "vertical",
-                      lineHeight: 1.2,
-                      minHeight: "2.4em",
-                      fontWeight: "bold",
+                      width: "auto",
+                      height: "100%",
+                      maxWidth: "100%",
+                      objectFit: "contain",
+                      borderRadius: 1,
+                      boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
                     }}
-                  >
-                    {book.title}
-                  </Typography>
-
-                  {book.authors && (
-                    <Typography
-                      variant="body2"
-                      color="text.secondary"
-                      gutterBottom
-                      sx={{
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                        whiteSpace: "nowrap",
-                        fontStyle: "italic",
-                      }}
-                    >
-                      Autor: {book.authors.name}
-                    </Typography>
-                  )}
-
-                  {book.publish_date && (
-                    <Typography
-                      variant="body2"
-                      color="text.secondary"
-                      gutterBottom
-                    >
-                      Rok vydání: {book.publish_date}
-                    </Typography>
-                  )}
-
-                  {book.publishers && (
-                    <Typography
-                      variant="body2"
-                      color="text.secondary"
-                      gutterBottom
-                      sx={{
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                        whiteSpace: "nowrap",
-                      }}
-                    >
-                      Vydavatel: {book.publishers.name}
-                    </Typography>
-                  )}
-
-                  {book.number_of_pages && (
-                    <Typography variant="body2" color="text.secondary">
-                      Stran: {book.number_of_pages}
-                    </Typography>
-                  )}
+                    image={
+                      cover?.large ||
+                      cover?.medium ||
+                      cover?.small ||
+                      "https://via.placeholder.com/200x280/e0e0e0/757575?text=📚+No+Cover"
+                    }
+                    alt={title}
+                  />
                 </Box>
 
-                {/* Identifikátory a tagy */}
-                {book.identifiers && (
-                  <Box sx={{ mt: 1 }}>
-                    <Stack direction="row" flexWrap="wrap" gap={0.5}>
-                      {book.identifiers.isbn_13 &&
-                        book.identifiers.isbn_13.length > 0 && (
+                {/* Detaily knihy */}
+                <CardContent
+                  sx={{
+                    flexGrow: 1,
+                    p: 2,
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-between",
+                    height: 250,
+                    overflow: "hidden",
+                  }}
+                >
+                  <Box>
+                    <Typography
+                      variant="h6"
+                      component="h4"
+                      gutterBottom
+                      sx={{
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        display: "-webkit-box",
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: "vertical",
+                        lineHeight: 1.2,
+                        minHeight: "2.4em",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      {title}
+                    </Typography>
+
+                    {authors && (
+                      <Typography
+                        variant="body2"
+                        color="text.secondary"
+                        gutterBottom
+                        sx={{
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                          whiteSpace: "nowrap",
+                          fontStyle: "italic",
+                        }}
+                      >
+                        Autor: {authors.name}
+                      </Typography>
+                    )}
+
+                    {publish_date && (
+                      <Typography
+                        variant="body2"
+                        color="text.secondary"
+                        gutterBottom
+                      >
+                        Rok vydání: {publish_date}
+                      </Typography>
+                    )}
+
+                    {publishers && (
+                      <Typography
+                        variant="body2"
+                        color="text.secondary"
+                        gutterBottom
+                        sx={{
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                          whiteSpace: "nowrap",
+                        }}
+                      >
+                        Vydavatel: {publishers.name}
+                      </Typography>
+                    )}
+
+                    {number_of_pages && (
+                      <Typography variant="body2" color="text.secondary">
+                        Stran: {number_of_pages}
+                      </Typography>
+                    )}
+                  </Box>
+
+                  {/* Identifikátory a tagy */}
+                  {identifiers && (
+                    <Box sx={{ mt: 1 }}>
+                      <Stack direction="row" flexWrap="wrap" gap={0.5}>
+                        {identifiers.isbn_13 &&
+                          identifiers.isbn_13.length > 0 && (
+                            <Chip
+                              label={`ISBN: ${identifiers.isbn_13[0].slice(-4)}`}
+                              variant="outlined"
+                              size="small"
+                              sx={{ fontSize: "0.65rem" }}
+                            />
+                          )}
+                        {identifiers.goodreads && (
                           <Chip
-                            label={`ISBN: ${book.identifiers.isbn_13[0].slice(-4)}`}
+                            label="Goodreads"
                             variant="outlined"
                             size="small"
+                            color="primary"
                             sx={{ fontSize: "0.65rem" }}
                           />
                         )}
-                      {book.identifiers.goodreads && (
-                        <Chip
-                          label="Goodreads"
-                          variant="outlined"
-                          size="small"
-                          color="primary"
-                          sx={{ fontSize: "0.65rem" }}
-                        />
-                      )}
-                    </Stack>
-                  </Box>
-                )}
-              </CardContent>
-            </Card>
-          </Box>
-        ))}
+                      </Stack>
+                    </Box>
+                  )}
+                </CardContent>
+              </Card>
+            </Box>
+          );
+        })}
       </Box>
     </Container>
   );

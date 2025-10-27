@@ -41,13 +41,15 @@ export const BookList = ({ books }: { books: Book[] }) => {
           mx: "auto",
         }}
       >
-        {books.map((book) => (
-          <BookCard
-            key={book.id}
-            book={book.detail}
-            onClick={() => handleBookClick(book)}
-          />
-        ))}
+        {books.map((book: Book) => {
+          return (
+            <BookCard
+              key={book.id}
+              book={book}
+              onClick={() => handleBookClick(book)}
+            />
+          );
+        })}
       </Box>
       {selectedBook && (
         <ModalDetail

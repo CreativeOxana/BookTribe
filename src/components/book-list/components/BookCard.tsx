@@ -1,13 +1,18 @@
 "use client";
-import { BookDetail } from "@/types/types";
+import { Book } from "@/types/types";
 import { Typography, Card, Box, CardContent, CardMedia } from "@mui/material";
 
 type Props = {
-  book: BookDetail;
+  book: Book;
   onClick?: () => void;
 };
 
-export const BookCard = ({ book, onClick }: Props) => {
+export const BookCard = ({
+  book: {
+    detail: { title, cover, authors, publish_date },
+  },
+  onClick,
+}: Props) => {
   const handleCardClick = () => {
     if (onClick) {
       onClick();
@@ -37,7 +42,7 @@ export const BookCard = ({ book, onClick }: Props) => {
       {/* Obrázek knihy - kompaktní */}
       <Box
         sx={{
-          height: 200, // Fixní výška pro obrázek
+          height: 200,
           width: "100%",
           display: "flex",
           justifyContent: "center",
@@ -58,12 +63,12 @@ export const BookCard = ({ book, onClick }: Props) => {
             boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
           }}
           image={
-            book.cover?.medium ||
-            book.cover?.large ||
-            book.cover?.small ||
+            cover?.medium ||
+            cover?.large ||
+            cover?.small ||
             "https://via.placeholder.com/150x200/e0e0e0/757575?text=📚"
           }
-          alt={book.title}
+          alt={title}
         />
       </Box>
 
@@ -95,10 +100,10 @@ export const BookCard = ({ book, onClick }: Props) => {
               fontSize: "0.9rem",
             }}
           >
-            {book.title}
+            {title}
           </Typography>
 
-          {book.authors && (
+          {authors && (
             <Typography
               variant="caption"
               color="text.secondary"
@@ -109,12 +114,12 @@ export const BookCard = ({ book, onClick }: Props) => {
                 fontSize: "0.75rem",
               }}
             >
-              {book.authors.name}
+              {authors.name}
             </Typography>
           )}
         </Box>
 
-        {book.publish_date && (
+        {publish_date && (
           <Typography
             variant="caption"
             color="text.secondary"
@@ -123,7 +128,7 @@ export const BookCard = ({ book, onClick }: Props) => {
               mt: 1,
             }}
           >
-            {book.publish_date}
+            {publish_date}
           </Typography>
         )}
       </CardContent>
