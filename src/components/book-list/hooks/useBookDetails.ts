@@ -39,7 +39,7 @@ export const useBookDetails = (bookIds: string[]) => {
       }
     };
     fetchBooks();
-  }, []);
+  }, [bookIds]);
 
   return { bookDetails, loading, error };
 };

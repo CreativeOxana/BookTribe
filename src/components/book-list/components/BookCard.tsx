@@ -1,6 +1,13 @@
 "use client";
 import { Book } from "@/types/types";
-import { Typography, Card, Box, CardContent, CardMedia } from "@mui/material";
+import {
+  Typography,
+  Card,
+  Box,
+  CardContent,
+  CardMedia,
+  Chip,
+} from "@mui/material";
 
 type Props = {
   book: Book;
@@ -10,6 +17,7 @@ type Props = {
 export const BookCard = ({
   book: {
     detail: { title, cover, authors, publish_date },
+    isRead,
   },
   onClick,
 }: Props) => {
@@ -84,6 +92,10 @@ export const BookCard = ({
         }}
       >
         <Box>
+          <Chip
+            label={isRead ? "Přečteno" : "Nepřečteno"}
+            color={isRead ? "success" : "error"}
+          />
           <Typography
             variant="subtitle1"
             component="h4"

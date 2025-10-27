@@ -17,19 +17,21 @@ import {
   Button,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import { Book } from "@/types/types";
+import { Book, UserBookRow } from "@/types/types";
 import { useState } from "react";
 
 interface ModalDetailProps {
   dialogOpen: boolean;
   handleCloseDialog: () => void;
   book: Book;
+  updateRow: (id: string, value: Partial<UserBookRow>) => void;
 }
 
 export const ModalDetail = ({
   dialogOpen,
   handleCloseDialog,
-  book: { detail },
+  book: { detail, id },
+  updateRow,
 }: ModalDetailProps) => {
   const [isRead, setIsRead] = useState(false);
   const [review, setReview] = useState("");
@@ -55,6 +57,11 @@ export const ModalDetail = ({
       // Zde by se mohla recenze uložit do localStorage nebo databáze
       console.log(`Recenze uložena pro knihu ${detail?.title}:`, review);
     }
+  };
+
+  const handleUpdate = () => {
+    updateRow(id, { isRead: true });
+    handleCloseDialog();
   };
 
   return (
@@ -165,6 +172,10 @@ export const ModalDetail = ({
               </Box>
             </Card>
           )}
+
+          <Button variant="contained" onClick={handleUpdate}>
+            Přečíst
+          </Button>
 
           {/* Checkbox pro označení přečtené knihy */}
           <Box sx={{ mt: 3, display: "flex", justifyContent: "center" }}>

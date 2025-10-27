@@ -1,10 +1,19 @@
-import { Book } from "@/types/types";
+import { Book, UserBookRow } from "@/types/types";
 import { useState } from "react";
 import { BookCard } from "./components/BookCard";
-import { Box } from "@mui/material";
+import { Box, Button, Stack } from "@mui/material";
 import { ModalDetail } from "./components/ModalDetail";
 
-export const BookList = ({ books }: { books: Book[] }) => {
+export const BookList = ({
+  books,
+  createRow,
+  updateRow,
+}: {
+  books: Book[];
+  createRow: (id: string) => void;
+  updateRow: (id: string, value: Partial<UserBookRow>) => void;
+}) => {
+  console.log("🚀 ~ books:", books);
   // Použití custom hooku pro načítání dat
 
   const [selectedBook, setSelectedBook] = useState<Book | null>(null);
@@ -56,8 +65,17 @@ export const BookList = ({ books }: { books: Book[] }) => {
           dialogOpen={dialogOpen}
           handleCloseDialog={handleCloseDialog}
           book={selectedBook}
+          updateRow={updateRow}
         />
       )}
+
+      <Stack sx={{ gap: 1 }}>
+        {["9780061122415", "9780743273565", "9780544003415"].map((id) => (
+          <Button key={id} variant="contained" onClick={() => createRow(id)}>
+            Přidat {id}
+          </Button>
+        ))}
+      </Stack>
     </>
   );
 };
