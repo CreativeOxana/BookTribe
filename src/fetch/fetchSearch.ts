@@ -1,18 +1,23 @@
 import { BookSearchResponse } from "@/types/types";
 
-// export const fetchSearch = async () => {
-//   const response = await fetch(
-//     "https://openlibrary.org/search.json?q=harry+potter&limit=1"
-//   );
-
-//   if (!response.ok) {
-//     throw new Error("Failed to fetch book data");
-//   }
-
-//   const data: BookSearchResponse = await response.json();
-
-//   return data;
-// };
+// Hlavní vyhledávací funkce
+export const searchBooks = async (query: string, limit = 10) => {
+  try {
+    const response = await fetch(
+      `https://openlibrary.org/search.json?q=${encodeURIComponent(query)}&limit=${limit}`
+    );
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const data: BookSearchResponse = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error in searchBooks:", error);
+    throw error;
+  }
+};
 
 // export const searchByTitle = async (title: string, limit = 10) => {
 //   try {

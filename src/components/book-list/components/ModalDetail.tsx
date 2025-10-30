@@ -39,7 +39,7 @@ export const ModalDetail = ({
 
   const handleReadToggle = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIsRead(event.target.checked);
-    // Pokud se odoznačí, vymaž recenzi
+
     if (!event.target.checked) {
       setReview("");
       setIsReviewSaved(false);
