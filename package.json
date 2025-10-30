@@ -16,6 +16,8 @@
     "@mui/icons-material": "^7.3.4",
     "@mui/material": "^7.3.4",
     "@mui/material-nextjs": "^7.3.3",
+    "@trivago/prettier-plugin-sort-imports": "^5.2.2",
+    "eslint-plugin-unused-imports": "^4.3.0",
     "next": "15.5.5",
     "react": "19.1.0",
     "react-dom": "19.1.0",
