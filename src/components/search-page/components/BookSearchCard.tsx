@@ -19,8 +19,9 @@ import { Search as SearchIcon } from "@mui/icons-material";
 import { searchBooks } from "@/fetch/fetchSearch";
 import { fetchDetail } from "@/fetch/fetchDetail";
 import { BookSearch, Book, BookDetail, UserBookRow } from "@/types/types";
-import { ModalDetail } from "@/components/book-list/components/ModalDetail";
+
 import { validateBookDetail } from "@/utils/validateBookDetail";
+import { ModalDetail } from "@/components/recommend-page/components/book-list/components/ModalDetail";
 
 export const BookSearchCard = () => {
   const [query, setQuery] = useState("harry potter");
@@ -200,7 +201,7 @@ export const BookSearchCard = () => {
   };
 
   return (
-    <Container maxWidth="lg" sx={{ py: 4 }}>
+    <>
       <Typography
         variant="h4"
         component="h2"
@@ -395,6 +396,6 @@ export const BookSearchCard = () => {
           updateRow={handleUpdateBook}
         />
       )}
-    </Container>
+    </>
   );
 };

@@ -10,8 +10,8 @@ import {
   Paper,
 } from "@mui/material";
 
-import { HomePage } from "@/components/home-page/HomePage";
+import { SearchPage } from "@/components/search-page/SearchPage";
 
-export default async function Home() {
-  return <HomePage />;
+export default async function Search() {
+  return <SearchPage />;
 }

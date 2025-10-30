@@ -34,14 +34,13 @@ import {
   Close,
 } from "@mui/icons-material";
 import { UserProfile, BookNote } from "@/types/types";
-import { BookSearchCard } from "@/components/book-search/BookSearchCard";
+import { BookSearchCard } from "@/components/search-page/components/BookSearchCard";
 
 interface ProfilePageProps {
   userId?: string;
 }
 
 export const ProfilePage = ({ userId = "current-user" }: ProfilePageProps) => {
-  // Mock data - v reálné aplikaci by se načítalo z API/databáze
   const [profile, setProfile] = useState<UserProfile>({
     id: userId,
     name: "Anna Čtenářka",
@@ -193,7 +192,7 @@ export const ProfilePage = ({ userId = "current-user" }: ProfilePageProps) => {
   );
 
   return (
-    <Container maxWidth="xl" sx={{ py: 4 }}>
+    <>
       {/* Profile Header */}
       <Paper
         elevation={3}
@@ -699,6 +698,6 @@ export const ProfilePage = ({ userId = "current-user" }: ProfilePageProps) => {
           }
         }
       `}</style>
-    </Container>
+    </>
   );
 };
