@@ -17,8 +17,7 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { searchBooks } from "@/fetch/fetchSearch";
-import { Book, BookDetail, BookSearch, UserBookRow } from "@/types/types";
-import { validateBookDetail } from "@/utils/validateBookDetail";
+import { BookSearch } from "@/types/types";
 
 export const BookSearchCard = () => {
   const [query, setQuery] = useState("harry potter");
