@@ -1,7 +1,7 @@
-import { Book, UserBookRow } from "@/types/types";
-import { useState } from "react";
-import { BookCard } from "./components/BookCard";
 import { Box, Button, Stack } from "@mui/material";
+import { useState } from "react";
+import { Book, UserBookRow } from "@/types/types";
+import { BookCard } from "./components/BookCard";
 import { ModalDetail } from "./components/ModalDetail";
 
 export const BookList = ({
@@ -51,13 +51,7 @@ export const BookList = ({
         }}
       >
         {books.map((book: Book) => {
-          return (
-            <BookCard
-              key={book.id}
-              book={book}
-              onClick={() => handleBookClick(book)}
-            />
-          );
+          return <BookCard key={book.id} book={book} onClick={() => handleBookClick(book)} />;
         })}
       </Box>
       {selectedBook && (

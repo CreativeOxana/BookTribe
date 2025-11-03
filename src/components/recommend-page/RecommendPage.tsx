@@ -1,18 +1,10 @@
 "use client";
-import {
-  Box,
-  CircularProgress,
-  Container,
-  Typography,
-  Divider,
-  Tabs,
-  Tab,
-  Paper,
-} from "@mui/material";
+
+import { Box, CircularProgress, Typography } from "@mui/material";
+import { useMemo } from "react";
 import { useBookDetails } from "@/components/recommend-page/hooks/useBookDetails";
-import { getBooks } from "@/utils/getBooks";
 import { useUserBookRows } from "@/components/recommend-page/hooks/useUserBookRows";
-import { useMemo, useState } from "react";
+import { getBooks } from "@/utils/getBooks";
 import { Layout } from "../layout/Layout";
 import { BookList } from "./components/book-list/BookList";
 

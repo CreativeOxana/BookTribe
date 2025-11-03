@@ -1,13 +1,7 @@
 "use client";
+
+import { Box, Card, CardContent, CardMedia, Chip, Typography } from "@mui/material";
 import { Book } from "@/types/types";
-import {
-  Typography,
-  Card,
-  Box,
-  CardContent,
-  CardMedia,
-  Chip,
-} from "@mui/material";
 
 type Props = {
   book: Book;
@@ -71,10 +65,7 @@ export const BookCard = ({
             boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
           }}
           image={
-            cover?.medium ||
-            cover?.large ||
-            cover?.small ||
-            "https://via.placeholder.com/150x200/e0e0e0/757575?text=📚"
+            cover?.medium || cover?.large || cover?.small || "https://via.placeholder.com/150x200/e0e0e0/757575?text=📚"
           }
           alt={title}
         />
@@ -92,10 +83,7 @@ export const BookCard = ({
         }}
       >
         <Box>
-          <Chip
-            label={isRead ? "Přečteno" : "Nepřečteno"}
-            color={isRead ? "success" : "error"}
-          />
+          <Chip label={isRead ? "Přečteno" : "Nepřečteno"} color={isRead ? "success" : "error"} />
           <Typography
             variant="subtitle1"
             component="h4"
@@ -143,6 +131,11 @@ export const BookCard = ({
             {publish_date}
           </Typography>
         )}
+        {/* Action Buttons */}
+        <Box sx={{ display: "flex", gap: 1, mt: 2, justifyContent: "center" }}>
+          <Chip label="Přidat" color="primary" icon={<span>➕</span>} />
+          <Chip label="Odebrat" color="error" icon={<span>➖</span>} />
+        </Box>
       </CardContent>
     </Card>
   );

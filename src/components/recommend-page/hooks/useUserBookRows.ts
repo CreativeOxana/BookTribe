@@ -1,8 +1,5 @@
-import { BookDetail, UserBookRow } from "@/types/types";
-import { useEffect, useState } from "react";
-import { fetchDetail } from "@/fetch/fetchDetail";
-import { validateBookDetail } from "@/utils/validateBookDetail";
 import { useLocalStorage } from "usehooks-ts";
+import { UserBookRow } from "@/types/types";
 
 const defaultUserBookRows: Record<string, UserBookRow> = {
   "9780439708180": {
@@ -33,12 +30,12 @@ const createDefaultRow = (id: string): UserBookRow => ({
 });
 
 export const useUserBookRows = () => {
-  const [userBookRows, setUserBookRows] = useLocalStorage<
-    Record<string, UserBookRow>
-  >("userBookRows", defaultUserBookRows);
+  const [userBookRows, setUserBookRows] = useLocalStorage<Record<string, UserBookRow>>(
+    "userBookRows",
+    defaultUserBookRows,
+  );
 
-  const createRow = (id: string) =>
-    setUserBookRows((prev) => ({ ...prev, [id]: createDefaultRow(id) }));
+  const createRow = (id: string) => setUserBookRows((prev) => ({ ...prev, [id]: createDefaultRow(id) }));
 
   const updateRow = (id: string, value: Partial<UserBookRow>) =>
     setUserBookRows((prev) => ({ ...prev, [id]: { ...prev[id], ...value } }));

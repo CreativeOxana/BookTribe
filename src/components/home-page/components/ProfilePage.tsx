@@ -1,40 +1,32 @@
 "use client";
-import { useState } from "react";
+
+import { Add, BookmarkAdd, Close, Edit, MenuBook, Search } from "@mui/icons-material";
 import {
-  Container,
-  Box,
-  Typography,
+  Alert,
   Avatar,
-  Paper,
-  LinearProgress,
-  Chip,
+  Box,
+  Button,
   Card,
   CardContent,
   CardMedia,
-  TextField,
-  Button,
-  Tabs,
-  Tab,
+  Chip,
   Dialog,
-  DialogTitle,
-  DialogContent,
   DialogActions,
-  IconButton,
-  Stack,
-  Rating,
+  DialogContent,
+  DialogTitle,
   Fade,
-  Alert,
+  IconButton,
+  LinearProgress,
+  Paper,
+  Rating,
+  Stack,
+  Tab,
+  Tabs,
+  TextField,
+  Typography,
 } from "@mui/material";
-import {
-  Add,
-  Edit,
-  BookmarkAdd,
-  MenuBook,
-  Search,
-  Close,
-} from "@mui/icons-material";
-import { UserProfile, BookNote } from "@/types/types";
-import { BookSearchCard } from "@/components/search-page/components/BookSearchCard";
+import { useState } from "react";
+import { BookNote, UserProfile } from "@/types/types";
 
 interface ProfilePageProps {
   userId?: string;
@@ -90,8 +82,7 @@ export const ProfilePage = ({ userId = "current-user" }: ProfilePageProps) => {
           title: "Duna",
           authors: { name: "Frank Herbert" },
           cover: {
-            medium:
-              "https://via.placeholder.com/200x300/3F51B5/white?text=DUNA",
+            medium: "https://via.placeholder.com/200x300/3F51B5/white?text=DUNA",
           },
         },
         comment: "Slyšela jsem, že je to sci-fi klasika!",
@@ -108,8 +99,7 @@ export const ProfilePage = ({ userId = "current-user" }: ProfilePageProps) => {
           title: "Hobit",
           authors: { name: "J.R.R. Tolkien" },
           cover: {
-            medium:
-              "https://via.placeholder.com/200x300/795548/white?text=HOBIT",
+            medium: "https://via.placeholder.com/200x300/795548/white?text=HOBIT",
           },
         },
         readAt: new Date("2024-09-15"),
@@ -147,9 +137,7 @@ export const ProfilePage = ({ userId = "current-user" }: ProfilePageProps) => {
   const [searchFilter, setSearchFilter] = useState("");
 
   const currentGoal = profile.readingGoals[0];
-  const progressPercentage = currentGoal
-    ? (currentGoal.currentBooks / currentGoal.targetBooks) * 100
-    : 0;
+  const progressPercentage = currentGoal ? (currentGoal.currentBooks / currentGoal.targetBooks) * 100 : 0;
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setActiveTab(newValue);
@@ -170,9 +158,7 @@ export const ProfilePage = ({ userId = "current-user" }: ProfilePageProps) => {
     setProfile((prev) => ({
       ...prev,
       readBooks: prev.readBooks.map((book) =>
-        book.bookId === bookId
-          ? { ...book, notes: [...book.notes, newNoteObj] }
-          : book
+        book.bookId === bookId ? { ...book, notes: [...book.notes, newNoteObj] } : book,
       ),
     }));
 
@@ -183,12 +169,8 @@ export const ProfilePage = ({ userId = "current-user" }: ProfilePageProps) => {
 
   const filteredReadBooks = profile.readBooks.filter(
     (book) =>
-      book.bookDetail.title
-        .toLowerCase()
-        .includes(searchFilter.toLowerCase()) ||
-      book.bookDetail.authors?.name
-        .toLowerCase()
-        .includes(searchFilter.toLowerCase())
+      book.bookDetail.title.toLowerCase().includes(searchFilter.toLowerCase()) ||
+      book.bookDetail.authors?.name.toLowerCase().includes(searchFilter.toLowerCase()),
   );
 
   return (
@@ -272,9 +254,7 @@ export const ProfilePage = ({ userId = "current-user" }: ProfilePageProps) => {
                 <Typography variant="h6" gutterBottom>
                   Čtenářský cíl {currentGoal.year}
                 </Typography>
-                <Box
-                  sx={{ display: "flex", alignItems: "center", gap: 2, mb: 1 }}
-                >
+                <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 1 }}>
                   <Box sx={{ flexGrow: 1 }}>
                     <LinearProgress
                       variant="determinate"
@@ -295,8 +275,8 @@ export const ProfilePage = ({ userId = "current-user" }: ProfilePageProps) => {
                   </Typography>
                 </Box>
                 <Typography variant="body2" sx={{ opacity: 0.9 }}>
-                  {progressPercentage.toFixed(1)}% splněno • Zbývá{" "}
-                  {currentGoal.targetBooks - currentGoal.currentBooks} knih
+                  {progressPercentage.toFixed(1)}% splněno • Zbývá {currentGoal.targetBooks - currentGoal.currentBooks}{" "}
+                  knih
                 </Typography>
               </Box>
             )}
@@ -304,7 +284,7 @@ export const ProfilePage = ({ userId = "current-user" }: ProfilePageProps) => {
         </Box>
       </Paper>
 
-      {/* Book Search Integration */}
+      {/* Book Search Integration
       <Paper sx={{ p: 3, mt: 4, mb: 4 }}>
         <Typography variant="h5" fontWeight="bold" gutterBottom>
           🔍 Najít nové knihy
@@ -312,7 +292,7 @@ export const ProfilePage = ({ userId = "current-user" }: ProfilePageProps) => {
         <Box sx={{ mt: 2 }}>
           <BookSearchCard />
         </Box>
-      </Paper>
+      </Paper> */}
 
       {/* Tabs Navigation */}
       <Paper sx={{ mb: 3 }}>
@@ -327,16 +307,8 @@ export const ProfilePage = ({ userId = "current-user" }: ProfilePageProps) => {
             },
           }}
         >
-          <Tab
-            icon={<BookmarkAdd />}
-            label="Chci přečíst"
-            iconPosition="start"
-          />
-          <Tab
-            icon={<MenuBook />}
-            label="Přečtené knihy"
-            iconPosition="start"
-          />
+          <Tab icon={<BookmarkAdd />} label="Chci přečíst" iconPosition="start" />
+          <Tab icon={<MenuBook />} label="Přečtené knihy" iconPosition="start" />
         </Tabs>
       </Paper>
 
@@ -394,10 +366,7 @@ export const ProfilePage = ({ userId = "current-user" }: ProfilePageProps) => {
                     <CardMedia
                       component="img"
                       height="200"
-                      image={
-                        item.bookDetail.cover?.medium ||
-                        "https://via.placeholder.com/200x300"
-                      }
+                      image={item.bookDetail.cover?.medium || "https://via.placeholder.com/200x300"}
                       alt={item.bookDetail.title}
                       sx={{ objectFit: "cover" }}
                     />
@@ -405,32 +374,19 @@ export const ProfilePage = ({ userId = "current-user" }: ProfilePageProps) => {
                       <Typography variant="h6" fontWeight="bold" gutterBottom>
                         {item.bookDetail.title}
                       </Typography>
-                      <Typography
-                        variant="body2"
-                        color="text.secondary"
-                        gutterBottom
-                      >
+                      <Typography variant="body2" color="text.secondary" gutterBottom>
                         {item.bookDetail.authors?.name}
                       </Typography>
 
                       <Chip
                         label={item.priority}
                         size="small"
-                        color={
-                          item.priority === "high"
-                            ? "error"
-                            : item.priority === "medium"
-                              ? "warning"
-                              : "default"
-                        }
+                        color={item.priority === "high" ? "error" : item.priority === "medium" ? "warning" : "default"}
                         sx={{ mb: 1 }}
                       />
 
                       {item.comment && (
-                        <Typography
-                          variant="body2"
-                          sx={{ mt: 1, fontStyle: "italic" }}
-                        >
+                        <Typography variant="body2" sx={{ mt: 1, fontStyle: "italic" }}>
                           &quot;{item.comment}&quot;
                         </Typography>
                       )}
@@ -466,9 +422,7 @@ export const ProfilePage = ({ userId = "current-user" }: ProfilePageProps) => {
                   value={searchFilter}
                   onChange={(e) => setSearchFilter(e.target.value)}
                   InputProps={{
-                    startAdornment: (
-                      <Search sx={{ mr: 1, color: "text.secondary" }} />
-                    ),
+                    startAdornment: <Search sx={{ mr: 1, color: "text.secondary" }} />,
                   }}
                   sx={{ width: 300 }}
                 />
@@ -501,10 +455,7 @@ export const ProfilePage = ({ userId = "current-user" }: ProfilePageProps) => {
                       <CardMedia
                         component="img"
                         height="250"
-                        image={
-                          book.bookDetail.cover?.medium ||
-                          "https://via.placeholder.com/200x300"
-                        }
+                        image={book.bookDetail.cover?.medium || "https://via.placeholder.com/200x300"}
                         alt={book.bookDetail.title}
                         sx={{ objectFit: "cover" }}
                       />
@@ -527,11 +478,7 @@ export const ProfilePage = ({ userId = "current-user" }: ProfilePageProps) => {
                       <Typography variant="h6" fontWeight="bold" gutterBottom>
                         {book.bookDetail.title}
                       </Typography>
-                      <Typography
-                        variant="body2"
-                        color="text.secondary"
-                        gutterBottom
-                      >
+                      <Typography variant="body2" color="text.secondary" gutterBottom>
                         {book.bookDetail.authors?.name}
                       </Typography>
 
@@ -542,11 +489,7 @@ export const ProfilePage = ({ userId = "current-user" }: ProfilePageProps) => {
                       {/* Notes */}
                       {book.notes.length > 0 && (
                         <Box sx={{ mb: 2 }}>
-                          <Typography
-                            variant="subtitle2"
-                            fontWeight="bold"
-                            gutterBottom
-                          >
+                          <Typography variant="subtitle2" fontWeight="bold" gutterBottom>
                             Poznámky ({book.notes.length})
                           </Typography>
                           {book.notes.slice(0, 1).map((note) => (
@@ -561,9 +504,7 @@ export const ProfilePage = ({ userId = "current-user" }: ProfilePageProps) => {
                                 fontSize: "0.85rem",
                               }}
                             >
-                              {note.note.length > 100
-                                ? `${note.note.substring(0, 100)}...`
-                                : note.note}
+                              {note.note.length > 100 ? `${note.note.substring(0, 100)}...` : note.note}
                             </Typography>
                           ))}
                         </Box>
@@ -572,11 +513,7 @@ export const ProfilePage = ({ userId = "current-user" }: ProfilePageProps) => {
                       {/* Photos */}
                       {book.photos.length > 0 && (
                         <Box sx={{ mb: 2 }}>
-                          <Typography
-                            variant="subtitle2"
-                            fontWeight="bold"
-                            gutterBottom
-                          >
+                          <Typography variant="subtitle2" fontWeight="bold" gutterBottom>
                             Fotografie ({book.photos.length})
                           </Typography>
                           <Stack direction="row" spacing={1}>
@@ -621,18 +558,10 @@ export const ProfilePage = ({ userId = "current-user" }: ProfilePageProps) => {
       )}
 
       {/* Add Note Dialog */}
-      <Dialog
-        open={openAddNote}
-        onClose={() => setOpenAddNote(false)}
-        maxWidth="md"
-        fullWidth
-      >
+      <Dialog open={openAddNote} onClose={() => setOpenAddNote(false)} maxWidth="md" fullWidth>
         <DialogTitle>
           Přidat poznámku ke knize
-          <IconButton
-            onClick={() => setOpenAddNote(false)}
-            sx={{ position: "absolute", right: 8, top: 8 }}
-          >
+          <IconButton onClick={() => setOpenAddNote(false)} sx={{ position: "absolute", right: 8, top: 8 }}>
             <Close />
           </IconButton>
         </DialogTitle>
@@ -649,10 +578,7 @@ export const ProfilePage = ({ userId = "current-user" }: ProfilePageProps) => {
           <Typography component="legend" gutterBottom>
             Hodnocení
           </Typography>
-          <Rating
-            value={newRating}
-            onChange={(event, newValue) => setNewRating(newValue)}
-          />
+          <Rating value={newRating} onChange={(event, newValue) => setNewRating(newValue)} />
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpenAddNote(false)}>Zrušit</Button>
@@ -667,17 +593,11 @@ export const ProfilePage = ({ userId = "current-user" }: ProfilePageProps) => {
       </Dialog>
 
       {/* Add Book Dialog Placeholder */}
-      <Dialog
-        open={openAddBook}
-        onClose={() => setOpenAddBook(false)}
-        maxWidth="lg"
-        fullWidth
-      >
+      <Dialog open={openAddBook} onClose={() => setOpenAddBook(false)} maxWidth="lg" fullWidth>
         <DialogTitle>Přidat knihu do seznamu</DialogTitle>
         <DialogContent>
           <Alert severity="info" sx={{ mb: 2 }}>
-            Zde bude integrace s vyhledáváním knih pro přidání do &quot;Chci
-            přečíst&quot; seznamu.
+            Zde bude integrace s vyhledáváním knih pro přidání do &quot;Chci přečíst&quot; seznamu.
           </Alert>
         </DialogContent>
         <DialogActions>

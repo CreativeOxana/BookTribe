@@ -1,16 +1,8 @@
 "use client";
-import {
-  Box,
-  CircularProgress,
-  Container,
-  Typography,
-  Divider,
-  Tabs,
-  Tab,
-  Paper,
-  AppBar,
-  Toolbar,
-} from "@mui/material";
+
+import { AppBar, Container, Stack, Toolbar, Typography } from "@mui/material";
+import { Link as MuiLink } from "@mui/material";
+import Link from "next/link";
 
 export const Layout = ({
   children,
@@ -19,21 +11,38 @@ export const Layout = ({
 }>) => {
   return (
     <>
-      <AppBar position="static">
+      <AppBar position="static" sx={{ background: "linear-gradient(135deg, #023d0fff 0%, #107c22ff 100%)" }}>
         <Container maxWidth="xl">
           <Toolbar disableGutters>
             <Typography
               variant="h5"
               noWrap
-              component="a"
-              href="/search"
               sx={{
-                color: "inherit",
+                color: "white",
                 textDecoration: "none",
+                fontWeight: "bold",
+                mr: 4,
+                display: "flex",
+                alignItems: "center",
+                gap: 1,
               }}
             >
-              Search
+              <span role="img" aria-label="kniha">
+                📚
+              </span>{" "}
+              BookNest
             </Typography>
+            <Stack direction="row" spacing={2} sx={{ ml: "auto" }}>
+              <MuiLink component={Link} href="/profile" color="inherit" underline="none" fontWeight="bold">
+                Profil
+              </MuiLink>
+              <MuiLink component={Link} href="/search" color="inherit" underline="none" fontWeight="bold">
+                Vyhledat knihy
+              </MuiLink>
+              <MuiLink component={Link} href="/recommend" color="inherit" underline="none" fontWeight="bold">
+                Doporučené knihy
+              </MuiLink>
+            </Stack>
           </Toolbar>
         </Container>
       </AppBar>
@@ -49,7 +58,7 @@ export const Layout = ({
             color: "green",
           }}
         >
-          📚 BookNest
+          Vítej v BookNest!
         </Typography>
 
         {children}

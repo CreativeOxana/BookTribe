@@ -1,6 +1,6 @@
-import { BookDetail } from "@/types/types";
 import { useEffect, useState } from "react";
 import { fetchDetail } from "@/fetch/fetchDetail";
+import { BookDetail } from "@/types/types";
 import { validateBookDetail } from "@/utils/validateBookDetail";
 
 export const useBookDetails = (bookIds: string[]) => {
@@ -23,17 +23,13 @@ export const useBookDetails = (bookIds: string[]) => {
         });
 
         const results = await Promise.all(bookPromises);
-        const validBooks = results.filter(
-          (book): book is BookDetail => book !== undefined
-        );
+        const validBooks = results.filter((book): book is BookDetail => book !== undefined);
 
         setBookDetails(validBooks);
 
         if (validBooks.length === 0) setError("Žádné knihy nenalezeny");
       } catch (err) {
-        setError(
-          `Chyba: ${err instanceof Error ? err.message : "Neznámá chyba"}`
-        );
+        setError(`Chyba: ${err instanceof Error ? err.message : "Neznámá chyba"}`);
       } finally {
         setLoading(false);
       }

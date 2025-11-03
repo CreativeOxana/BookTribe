@@ -1,24 +1,24 @@
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  Box,
-  Typography,
-  IconButton,
-  Card,
-  CardMedia,
-  CardContent,
-  Stack,
-  Divider,
-  Checkbox,
-  FormControlLabel,
-  TextField,
-  Collapse,
-  Button,
-} from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import { Book, UserBookRow } from "@/types/types";
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  CardMedia,
+  Checkbox,
+  Collapse,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  Divider,
+  FormControlLabel,
+  IconButton,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { useState } from "react";
+import { Book, UserBookRow } from "@/types/types";
 
 interface ModalDetailProps {
   dialogOpen: boolean;
@@ -27,12 +27,7 @@ interface ModalDetailProps {
   updateRow: (id: string, value: Partial<UserBookRow>) => void;
 }
 
-export const ModalDetail = ({
-  dialogOpen,
-  handleCloseDialog,
-  book: { detail, id },
-  updateRow,
-}: ModalDetailProps) => {
+export const ModalDetail = ({ dialogOpen, handleCloseDialog, book: { detail, id }, updateRow }: ModalDetailProps) => {
   const [isRead, setIsRead] = useState(false);
   const [review, setReview] = useState("");
   const [isReviewSaved, setIsReviewSaved] = useState(false);
@@ -66,18 +61,9 @@ export const ModalDetail = ({
 
   return (
     <>
-      <Dialog
-        open={dialogOpen}
-        onClose={handleCloseDialog}
-        maxWidth="md"
-        fullWidth
-      >
+      <Dialog open={dialogOpen} onClose={handleCloseDialog} maxWidth="md" fullWidth>
         <DialogTitle>
-          <Box
-            display="flex"
-            justifyContent="space-between"
-            alignItems="center"
-          >
+          <Box display="flex" justifyContent="space-between" alignItems="center">
             <Typography variant="h5">Detail knihy</Typography>
             <IconButton onClick={handleCloseDialog}>
               <CloseIcon />
@@ -131,9 +117,7 @@ export const ModalDetail = ({
                           <Typography variant="subtitle1" fontWeight="bold">
                             Autor:
                           </Typography>
-                          <Typography variant="body1">
-                            {detail.authors.name}
-                          </Typography>
+                          <Typography variant="body1">{detail.authors.name}</Typography>
                         </Box>
                       )}
                       {detail.publishers && (
@@ -141,9 +125,7 @@ export const ModalDetail = ({
                           <Typography variant="subtitle1" fontWeight="bold">
                             Vydavatel:
                           </Typography>
-                          <Typography variant="body1">
-                            {detail.publishers.name}
-                          </Typography>
+                          <Typography variant="body1">{detail.publishers.name}</Typography>
                         </Box>
                       )}
                       {detail.publish_date && (
@@ -151,9 +133,7 @@ export const ModalDetail = ({
                           <Typography variant="subtitle1" fontWeight="bold">
                             Datum vydání:
                           </Typography>
-                          <Typography variant="body1">
-                            {detail.publish_date}
-                          </Typography>
+                          <Typography variant="body1">{detail.publish_date}</Typography>
                         </Box>
                       )}
                       {detail.number_of_pages && (
@@ -161,9 +141,7 @@ export const ModalDetail = ({
                           <Typography variant="subtitle1" fontWeight="bold">
                             Počet stran:
                           </Typography>
-                          <Typography variant="body1">
-                            {detail.number_of_pages}
-                          </Typography>
+                          <Typography variant="body1">{detail.number_of_pages}</Typography>
                         </Box>
                       )}
                     </Stack>
@@ -180,13 +158,7 @@ export const ModalDetail = ({
           {/* Checkbox pro označení přečtené knihy */}
           <Box sx={{ mt: 3, display: "flex", justifyContent: "center" }}>
             <FormControlLabel
-              control={
-                <Checkbox
-                  checked={isRead}
-                  onChange={handleReadToggle}
-                  color="success"
-                />
-              }
+              control={<Checkbox checked={isRead} onChange={handleReadToggle} color="success" />}
               label={
                 <Typography variant="body1" sx={{ fontWeight: "medium" }}>
                   {isRead ? " Knihu jsem přečetl/a" : " Označit jako přečtenou"}
@@ -259,11 +231,7 @@ export const ModalDetail = ({
               </Box>
 
               {isReviewSaved && (
-                <Typography
-                  variant="body2"
-                  color="success.main"
-                  sx={{ textAlign: "center", mt: 1 }}
-                >
+                <Typography variant="body2" color="success.main" sx={{ textAlign: "center", mt: 1 }}>
                   ✨ Vaše recenze byla úspěšně uložena!
                 </Typography>
               )}
