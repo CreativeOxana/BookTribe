@@ -92,7 +92,7 @@ export const BookSearchCard = () => {
       {addedBooks.size > 0 && (
         <Box sx={{ textAlign: "center", mb: 3 }}>
           <Chip
-            label={`📚 Přidáno: ${addedBooks.size} ${addedBooks.size === 1 ? "kniha" : addedBooks.size < 5 ? "knihy" : "knih"}`}
+            label={`📚 Chci přečíst: ${addedBooks.size} ${addedBooks.size === 1 ? "kniha" : addedBooks.size < 5 ? "knihy" : "knih"}`}
             color="secondary"
             variant="outlined"
             sx={{ fontSize: "0.9rem", px: 1 }}
