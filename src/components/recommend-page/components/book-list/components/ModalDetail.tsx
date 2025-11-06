@@ -18,7 +18,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useState } from "react";
-import { Book, UserBookRow } from "@/types/types";
+import { Book, UserBookRow } from "@/types/typesSearch";
 
 interface ModalDetailProps {
   dialogOpen: boolean;

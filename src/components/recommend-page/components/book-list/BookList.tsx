@@ -1,6 +1,6 @@
 import { Alert, Box, Button, Stack } from "@mui/material";
 import { useState } from "react";
-import { Book, UserBookRow } from "@/types/types";
+import { Book, UserBookRow } from "@/types/typesDetail";
 import { BookCard } from "./components/BookCard";
 import { ModalDetail } from "./components/ModalDetail";
 
@@ -14,7 +14,6 @@ export const BookList = ({
   updateRow: (id: string, value: Partial<UserBookRow>) => void;
 }) => {
   console.log("🚀 ~ books:", books);
-  // Použití custom hooku pro načítání dat
 
   const [selectedBook, setSelectedBook] = useState<Book | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);

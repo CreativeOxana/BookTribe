@@ -26,7 +26,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useState } from "react";
-import { BookNote, UserProfile } from "@/types/types";
+import { BookNote, UserProfile } from "@/types/typesSearch";
 
 interface ProfilePageProps {
   userId?: string;

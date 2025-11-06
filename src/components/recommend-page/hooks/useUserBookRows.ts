@@ -1,5 +1,5 @@
 import { useLocalStorage } from "usehooks-ts";
-import { UserBookRow } from "@/types/types";
+import { UserBookRow } from "@/types/typesSearch";
 
 const defaultUserBookRows: Record<string, UserBookRow> = {
   "9780439708180": {

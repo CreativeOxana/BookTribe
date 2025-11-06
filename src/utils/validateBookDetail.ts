@@ -1,8 +1,8 @@
-import { BookDetail, BookDetailResponse } from "@/types/types";
+import { BookDetail, BookDetailResponse } from "@/types/typesDetail";
 
 export const validateBookDetail = (data: BookDetailResponse): BookDetail | undefined => {
   if (data && Object.values(data).length > 0) {
-    // @ts-expect-error @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const bookData = Object.values(data)[0] as any;
 
     if (!bookData.title) {

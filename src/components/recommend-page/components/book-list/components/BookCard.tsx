@@ -1,7 +1,7 @@
 "use client";
 
 import { Box, Card, CardContent, CardMedia, Chip, Typography } from "@mui/material";
-import { Book } from "@/types/types";
+import { Book } from "@/types/typesDetail";
 
 type Props = {
   book: Book;

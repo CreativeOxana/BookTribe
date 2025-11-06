@@ -1,4 +1,4 @@
-import { Book, BookDetail, UserBookRow } from "@/types/types";
+import { Book, BookDetail, UserBookRow } from "@/types/typesDetail";
 
 export const getBooks = (userBookRows: Record<string, UserBookRow>, bookDetails: BookDetail[] = []): Book[] => {
   return Object.values(userBookRows)

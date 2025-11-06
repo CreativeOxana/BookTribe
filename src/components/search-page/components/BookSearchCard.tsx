@@ -16,8 +16,8 @@ import {
   Typography,
 } from "@mui/material";
 import { useState } from "react";
-import { searchBooks } from "@/fetch/fetchSearch";
-import { BookSearch } from "@/types/types";
+import { searchBooks } from "@/fetch/fetchSearchMain";
+import { BookSearch } from "@/types/typesSearch";
 
 export const BookSearchCard = () => {
   const [query, setQuery] = useState("harry potter");
@@ -48,9 +48,14 @@ export const BookSearchCard = () => {
     }
   };
 
-  const getCoverUrl = (coverId?: number) => {
-    if (!coverId) return null;
-    return `https://covers.openlibrary.org/b/id/${coverId}-M.jpg`;
+  // Vrátí URL coveru z různých polí (cover_i, cover_edition_key (OLID), nebo ISBN)
+  const getCoverUrlForBook = (book: BookSearch): string | null => {
+    // 1) cover_i (covers by id)
+    if (book.cover_i) return `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`;
+
+    // 2) cover_edition_key (OLID)
+    if (book.cover_edition_key) return `https://covers.openlibrary.org/b/olid/${book.cover_edition_key}-M.jpg`;
+    return null;
   };
 
   return (
@@ -110,7 +115,8 @@ export const BookSearchCard = () => {
           </Typography>
           <List sx={{ bgcolor: "background.paper", borderRadius: 1 }}>
             {searchResults.map((book, index) => {
-              const { key, title, author_name = [], first_publish_year, publisher = [], subject = [], cover_i } = book;
+              const { key, title, author_name = [], first_publish_year } = book;
+              const coverSrc = getCoverUrlForBook(book);
               return (
                 <Box key={`${key}-${index}`} sx={{ position: "relative" }}>
                   <ListItem disablePadding>
@@ -156,10 +162,10 @@ export const BookSearchCard = () => {
                         />
                       </Stack>
                       {/* Obrázek knihy */}
-                      {cover_i && getCoverUrl(cover_i) && (
+                      {coverSrc ? (
                         <Box
                           component="img"
-                          src={getCoverUrl(cover_i)!}
+                          src={coverSrc}
                           alt={title}
                           sx={{
                             width: 60,
@@ -173,7 +179,7 @@ export const BookSearchCard = () => {
                             (e.target as HTMLImageElement).style.display = "none";
                           }}
                         />
-                      )}
+                      ) : null}
                       <Box sx={{ flexGrow: 1 }}>
                         <Typography variant="h6" component="div" gutterBottom>
                           {title}
@@ -187,33 +193,6 @@ export const BookSearchCard = () => {
                           <Typography variant="body2" color="text.secondary" gutterBottom component="div">
                             Rok vydání: {first_publish_year}
                           </Typography>
-                        )}
-                        {publisher.length > 0 && (
-                          <Typography variant="body2" color="text.secondary" gutterBottom component="div">
-                            Vydavatel: {publisher[0]}
-                          </Typography>
-                        )}
-                        {subject.length > 0 && (
-                          <Stack direction="row" flexWrap="wrap" gap={0.5} sx={{ mt: 1 }}>
-                            {subject.slice(0, 3).map((subj, subIndex) => (
-                              <Chip
-                                key={subIndex}
-                                label={subj}
-                                size="small"
-                                variant="outlined"
-                                sx={{ fontSize: "0.7rem" }}
-                              />
-                            ))}
-                            {subject.length > 3 && (
-                              <Chip
-                                label={`+${subject.length - 3} další`}
-                                size="small"
-                                variant="outlined"
-                                color="primary"
-                                sx={{ fontSize: "0.7rem" }}
-                              />
-                            )}
-                          </Stack>
                         )}
                       </Box>
                     </ListItemButton>

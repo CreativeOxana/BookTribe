@@ -1,4 +1,4 @@
-import { BookDetail, BookDetailResponse } from "@/types/types";
+import { BookDetail, BookDetailResponse } from "@/types/typesDetail";
 import { validateBookDetail } from "@/utils/validateBookDetail";
 
 const fetchDetail = async (isbn: string) => {

@@ -1,32 +1,15 @@
-import { BookDetail, BookDetailResponse } from "@/types/types";
+import { BookSearch, BookSearchResponse } from "@/types/typesSearch";
 
-export const validateBookDetail = (data: BookDetailResponse): BookDetail | undefined => {
-  if (data && Object.values(data).length > 0) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const bookData = Object.values(data)[0] as any;
+// Jednoduchá validace výsledků vyhledávání — odstraní položky bez title nebo key
+export const validateBookSearch = (data: BookSearchResponse): BookSearch[] => {
+  if (!data || !Array.isArray(data.docs)) return [];
 
-    if (!bookData.title) {
-      return;
-    }
+  const valid: BookSearch[] = data.docs.filter((doc) => {
+    if (!doc) return false;
+    if (typeof doc.title !== "string" || doc.title.trim() === "") return false;
+    if (typeof doc.key !== "string" || doc.key.trim() === "") return false;
+    return true;
+  });
 
-    const convertedBook: BookDetail = {
-      title: bookData.title || "Neznámý název",
-      authors:
-        Array.isArray(bookData.authors) && bookData.authors.length > 0 ? { name: bookData.authors[0].name } : undefined,
-      publishers:
-        Array.isArray(bookData.publishers) && bookData.publishers.length > 0
-          ? { name: bookData.publishers[0].name }
-          : undefined,
-      publish_date: bookData.publish_date,
-      number_of_pages: bookData.number_of_pages,
-      cover: bookData.cover,
-      identifiers: bookData.identifiers,
-      language: bookData.language,
-      id: bookData.identifiers?.isbn_13.toString(),
-    };
-
-    return convertedBook;
-  } else {
-    return;
-  }
+  return valid;
 };
