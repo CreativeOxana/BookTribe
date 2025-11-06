@@ -10,7 +10,6 @@ import {
   Divider,
   List,
   ListItem,
-  ListItemButton,
   Stack,
   TextField,
   Typography,
@@ -25,6 +24,25 @@ export const BookSearchCard = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [hasSearched, setHasSearched] = useState(false);
+
+  // Jednoduchý lokální stav pro sledování přidaných knih
+  const [addedBooks, setAddedBooks] = useState<Set<string>>(new Set());
+
+  // Přidat knihu
+  const handleAddBook = (bookKey: string, bookTitle: string) => {
+    setAddedBooks((prev) => new Set([...prev, bookKey]));
+    console.log(`📚 Kniha "${bookTitle}" přidána`);
+  };
+
+  // Odebrat knihu
+  const handleRemoveBook = (bookKey: string, bookTitle: string) => {
+    setAddedBooks((prev) => {
+      const newSet = new Set(prev);
+      newSet.delete(bookKey);
+      return newSet;
+    });
+    console.log(`❌ Kniha "${bookTitle}" odebrána`);
+  };
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -65,10 +83,22 @@ export const BookSearchCard = () => {
         component="h2"
         gutterBottom
         textAlign="center"
-        sx={{ mb: 4, fontWeight: "bold", color: "primary.main" }}
+        sx={{ mb: 2, fontWeight: "bold", color: "primary.main" }}
       >
         🔍 Najdi knihu
       </Typography>
+
+      {/* Zobrazení počtu knih v seznamu */}
+      {addedBooks.size > 0 && (
+        <Box sx={{ textAlign: "center", mb: 3 }}>
+          <Chip
+            label={`📚 Přidáno: ${addedBooks.size} ${addedBooks.size === 1 ? "kniha" : addedBooks.size < 5 ? "knihy" : "knih"}`}
+            color="secondary"
+            variant="outlined"
+            sx={{ fontSize: "0.9rem", px: 1 }}
+          />
+        </Box>
+      )}
       {/* Vyhledávací formulář */}
       <Box
         component="form"
@@ -120,9 +150,12 @@ export const BookSearchCard = () => {
               return (
                 <Box key={`${key}-${index}`} sx={{ position: "relative" }}>
                   <ListItem disablePadding>
-                    <ListItemButton
+                    <Box
                       sx={{
                         p: 2,
+                        display: "flex",
+                        alignItems: "flex-start",
+                        width: "100%",
                         "&:hover": {
                           bgcolor: "action.hover",
                         },
@@ -140,26 +173,47 @@ export const BookSearchCard = () => {
                           alignItems: "center",
                         }}
                       >
-                        <Chip
-                          label="Přidat"
-                          color="primary"
-                          icon={<span>➕</span>}
-                          sx={{
-                            minWidth: 90,
-                            textAlign: "center",
-                            whiteSpace: "nowrap",
-                          }}
-                        />
-                        <Chip
-                          label="Odebrat"
-                          color="error"
-                          icon={<span>➖</span>}
-                          sx={{
-                            minWidth: 90,
-                            textAlign: "center",
-                            whiteSpace: "nowrap",
-                          }}
-                        />
+                        {!addedBooks.has(key) ? (
+                          <Button
+                            variant="contained"
+                            size="small"
+                            startIcon={<span>➕</span>}
+                            onClick={(e) => {
+                              e.stopPropagation(); // Zabraňuje kliknuti na rodičovský element
+                              handleAddBook(key, title);
+                            }}
+                            sx={{
+                              minWidth: 90,
+                              fontSize: "0.75rem",
+                              py: 0.5,
+                              backgroundColor: "success.main",
+                              color: "success.contrastText",
+                              "&:hover": {
+                                backgroundColor: "success.dark",
+                              },
+                            }}
+                          >
+                            Přidat
+                          </Button>
+                        ) : (
+                          <Button
+                            variant="contained"
+                            color="error"
+                            size="small"
+                            startIcon={<span>➖</span>}
+                            onClick={(e) => {
+                              e.stopPropagation(); // Zabraňuje kliknuti na rodičovský element
+                              handleRemoveBook(key, title);
+                            }}
+                            sx={{
+                              minWidth: 90,
+                              fontSize: "0.75rem",
+                              py: 0.5,
+                            }}
+                          >
+                            Odebrat
+                          </Button>
+                        )}
                       </Stack>
                       {/* Obrázek knihy */}
                       {coverSrc ? (
@@ -195,7 +249,7 @@ export const BookSearchCard = () => {
                           </Typography>
                         )}
                       </Box>
-                    </ListItemButton>
+                    </Box>
                   </ListItem>
                   {index < searchResults.length - 1 && <Divider />}
                 </Box>
