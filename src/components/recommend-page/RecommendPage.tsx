@@ -11,10 +11,8 @@ import { BookList } from "./components/book-list/BookList";
 export const RecommendPage = () => {
   const { userBookRows, createRow, updateRow } = useUserBookRows();
   const booklist = useMemo(() => Object.keys(userBookRows), [userBookRows]);
-  const { bookDetails, loading, error } = useBookDetails(booklist);
+  const { bookDetails, loading } = useBookDetails(booklist);
   const books = getBooks(userBookRows, bookDetails);
-
-  if (error) return <div>Chyba: {error}</div>;
 
   return (
     <Layout>

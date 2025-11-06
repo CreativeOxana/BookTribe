@@ -1,4 +1,4 @@
-import { Box, Button, Stack } from "@mui/material";
+import { Alert, Box, Button, Stack } from "@mui/material";
 import { useState } from "react";
 import { Book, UserBookRow } from "@/types/types";
 import { BookCard } from "./components/BookCard";
@@ -54,6 +54,7 @@ export const BookList = ({
           return <BookCard key={book.id} book={book} onClick={() => handleBookClick(book)} />;
         })}
       </Box>
+      {!books.length && <Alert severity="info">Žádné knihy k zobrazení.</Alert>}
       {selectedBook && (
         <ModalDetail
           dialogOpen={dialogOpen}
