@@ -30,7 +30,7 @@ export const Layout = ({
               <span role="img" aria-label="kniha">
                 📚
               </span>{" "}
-              BookNest
+              BookSoul
             </Typography>
             <Stack direction="row" spacing={2} sx={{ ml: "auto" }}>
               <MuiLink component={Link} href="/profile" color="inherit" underline="none" fontWeight="bold">
@@ -58,7 +58,7 @@ export const Layout = ({
             color: "green",
           }}
         >
-          Vítej v BookNest!
+          Vítej v BookSoul!
         </Typography>
 
         {children}

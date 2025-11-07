@@ -1,32 +1,24 @@
 "use client";
 
-import { Add, BookmarkAdd, Close, Edit, MenuBook, Search } from "@mui/icons-material";
+import { Add, BookmarkAdd, MenuBook, Search } from "@mui/icons-material";
 import {
-  Alert,
   Avatar,
   Box,
   Button,
-  Card,
-  CardContent,
-  CardMedia,
   Chip,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
   Fade,
-  IconButton,
   LinearProgress,
   Paper,
-  Rating,
   Stack,
   Tab,
   Tabs,
   TextField,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
-import { BookNote, UserProfile } from "@/types/typesProfile";
+import { useEffect, useState } from "react";
+import { searchBooks } from "@/fetch/fetchSearchMain";
+import { UserProfile, WantToReadBook } from "@/types/typesProfile";
+import { BookShelfCard } from "./BookShelfCard";
 
 interface ProfilePageProps {
   userId?: string;
@@ -79,15 +71,51 @@ export const ProfilePage = ({ userId = "current-user" }: ProfilePageProps) => {
         bookId: "book1",
         bookDetail: {
           id: "book1",
-          title: "Duna",
-          authors: { name: "Frank Herbert" },
+          title: "Harry Potter a Kámen mudrců",
+          authors: { name: "J.K. Rowling" },
           cover: {
-            medium: "https://via.placeholder.com/200x300/3F51B5/white?text=DUNA",
+            medium: "https://covers.openlibrary.org/b/isbn/0439708184-M.jpg",
+            large: "https://covers.openlibrary.org/b/isbn/0439708184-L.jpg",
+            small: "https://covers.openlibrary.org/b/isbn/0439708184-S.jpg",
           },
         },
-        comment: "Slyšela jsem, že je to sci-fi klasika!",
+        comment: "Musím si konečně přečíst tuto legendu!",
         priority: "high",
         addedAt: new Date("2024-10-01"),
+      },
+      {
+        id: "2",
+        bookId: "book3",
+        bookDetail: {
+          id: "book3",
+          title: "1984",
+          authors: { name: "George Orwell" },
+          cover: {
+            medium: "https://covers.openlibrary.org/b/isbn/0452284236-M.jpg",
+            large: "https://covers.openlibrary.org/b/isbn/0452284236-L.jpg",
+            small: "https://covers.openlibrary.org/b/isbn/0452284236-S.jpg",
+          },
+        },
+        comment: "Klasika dystopické literatury",
+        priority: "medium",
+        addedAt: new Date("2024-10-05"),
+      },
+      {
+        id: "3",
+        bookId: "book4",
+        bookDetail: {
+          id: "book4",
+          title: "Malý princ",
+          authors: { name: "Antoine de Saint-Exupéry" },
+          cover: {
+            medium: "https://covers.openlibrary.org/b/isbn/0156012197-M.jpg",
+            large: "https://covers.openlibrary.org/b/isbn/0156012197-L.jpg",
+            small: "https://covers.openlibrary.org/b/isbn/0156012197-S.jpg",
+          },
+        },
+        comment: "Možná jednou, když budu mít čas",
+        priority: "low",
+        addedAt: new Date("2024-10-10"),
       },
     ],
     readBooks: [
@@ -96,10 +124,12 @@ export const ProfilePage = ({ userId = "current-user" }: ProfilePageProps) => {
         bookId: "book2",
         bookDetail: {
           id: "book2",
-          title: "Hobit",
-          authors: { name: "J.R.R. Tolkien" },
+          title: "Alchymista",
+          authors: { name: "Paulo Coelho" },
           cover: {
-            medium: "https://via.placeholder.com/200x300/795548/white?text=HOBIT",
+            medium: "https://covers.openlibrary.org/b/isbn/0062315005-M.jpg",
+            large: "https://covers.openlibrary.org/b/isbn/0062315005-L.jpg",
+            small: "https://covers.openlibrary.org/b/isbn/0062315005-S.jpg",
           },
         },
         readAt: new Date("2024-09-15"),
@@ -108,7 +138,7 @@ export const ProfilePage = ({ userId = "current-user" }: ProfilePageProps) => {
           {
             id: "note1",
             bookId: "book2",
-            note: "Úžasná fantasy klasika! Tolkienův svět je neuvěřitelně detailní.",
+            note: "Nádherný příběh o hledání vlastní životní cesty. Coelhova filozofie je inspirativní.",
             rating: 5,
             createdAt: new Date("2024-09-15"),
             updatedAt: new Date("2024-09-15"),
@@ -118,8 +148,8 @@ export const ProfilePage = ({ userId = "current-user" }: ProfilePageProps) => {
           {
             id: "photo1",
             bookId: "book2",
-            url: "https://via.placeholder.com/300x200/4CAF50/white?text=Reading+Spot",
-            caption: "Čtení na balkoně za krásného počasí",
+            url: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=200&fit=crop",
+            caption: "Čtení při západu slunce - perfektní atmosféra pro tuto knihu",
             createdAt: new Date("2024-09-10"),
           },
         ],
@@ -129,12 +159,122 @@ export const ProfilePage = ({ userId = "current-user" }: ProfilePageProps) => {
   });
 
   const [activeTab, setActiveTab] = useState(0);
-  const [openAddBook, setOpenAddBook] = useState(false);
-  const [openAddNote, setOpenAddNote] = useState(false);
-  const [selectedBook, setSelectedBook] = useState<string | null>(null);
-  const [newNote, setNewNote] = useState("");
-  const [newRating, setNewRating] = useState<number | null>(null);
   const [searchFilter, setSearchFilter] = useState("");
+
+  // Načítání skutečných knih z Open Library - dočasně vypnuto
+  useEffect(() => {
+    const loadRealBooks = async () => {
+      // Temporarily disabled to use static test data with working covers
+      return;
+      try {
+        console.log("🔍 Načítám skutečné knihy z Open Library...");
+
+        // Načteme Harry Potter
+        console.log("📚 Hledám Harry Potter...");
+        const harryPotterResult = await searchBooks("Harry Potter Philosopher Stone", 1);
+        const harryPotter = harryPotterResult.docs[0];
+        console.log("✅ Harry Potter nalezen:", harryPotter);
+
+        // Načteme Alchymista
+        console.log("📚 Hledám Alchymista...");
+        const alchemistResult = await searchBooks("Alchemist Paulo Coelho", 1);
+        const alchemist = alchemistResult.docs[0];
+        console.log("✅ Alchemist nalezen:", alchemist);
+
+        if (harryPotter) {
+          setProfile((prev) => ({
+            ...prev,
+            wantToRead: [
+              {
+                id: "1",
+                bookId: "book1",
+                bookDetail: {
+                  id: "book1",
+                  title: harryPotter.title,
+                  authors: { name: harryPotter.author_name?.[0] || "J.K. Rowling" },
+                  cover: {
+                    medium: harryPotter.cover_i
+                      ? `https://covers.openlibrary.org/b/id/${harryPotter.cover_i}-M.jpg`
+                      : "https://books.google.com/books/content?id=wrOQLV6EK-wC&printsec=frontcover&img=1&zoom=1&source=gbs_api",
+                    large: harryPotter.cover_i
+                      ? `https://covers.openlibrary.org/b/id/${harryPotter.cover_i}-L.jpg`
+                      : "https://books.google.com/books/content?id=wrOQLV6EK-wC&printsec=frontcover&img=1&zoom=2&source=gbs_api",
+                    small: harryPotter.cover_i
+                      ? `https://covers.openlibrary.org/b/id/${harryPotter.cover_i}-S.jpg`
+                      : "https://books.google.com/books/content?id=wrOQLV6EK-wC&printsec=frontcover&img=1&zoom=0&source=gbs_api",
+                  },
+                },
+                comment: "Musím si konečně přečíst tuto legendu!",
+                priority: "high",
+                addedAt: new Date("2024-10-01"),
+              },
+            ],
+          }));
+        }
+
+        if (alchemist) {
+          setProfile((prev) => ({
+            ...prev,
+            readBooks: [
+              {
+                id: "1",
+                bookId: "book2",
+                bookDetail: {
+                  id: "book2",
+                  title: alchemist.title,
+                  authors: { name: alchemist.author_name?.[0] || "Paulo Coelho" },
+                  cover: {
+                    medium: alchemist.cover_i
+                      ? `https://covers.openlibrary.org/b/id/${alchemist.cover_i}-M.jpg`
+                      : "https://books.google.com/books/content?id=FzVjBgAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api",
+                    large: alchemist.cover_i
+                      ? `https://covers.openlibrary.org/b/id/${alchemist.cover_i}-L.jpg`
+                      : "https://books.google.com/books/content?id=FzVjBgAAQBAJ&printsec=frontcover&img=1&zoom=2&source=gbs_api",
+                    small: alchemist.cover_i
+                      ? `https://covers.openlibrary.org/b/id/${alchemist.cover_i}-S.jpg`
+                      : "https://books.google.com/books/content?id=FzVjBgAAQBAJ&printsec=frontcover&img=1&zoom=0&source=gbs_api",
+                  },
+                },
+                readAt: new Date("2024-09-15"),
+                rating: 5,
+                notes: [
+                  {
+                    id: "note1",
+                    bookId: "book2",
+                    note: "Nádherný příběh o hledání vlastní životní cesty. Coelhova filozofie je inspirativní.",
+                    rating: 5,
+                    createdAt: new Date("2024-09-15"),
+                    updatedAt: new Date("2024-09-15"),
+                  },
+                ],
+                photos: [
+                  {
+                    id: "photo1",
+                    bookId: "book2",
+                    url: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=200&fit=crop",
+                    caption: "Čtení při západu slunce - perfektní atmosféra pro tuto knihu",
+                    createdAt: new Date("2024-09-10"),
+                  },
+                ],
+              },
+            ],
+          }));
+        }
+
+        console.log("📖 Knihy úspěšně načteny!", {
+          harryPotter: harryPotter?.title,
+          alchemist: alchemist?.title,
+          harryPotterCover: harryPotter?.cover_i,
+          alchemistCover: alchemist?.cover_i,
+        });
+      } catch (error) {
+        console.error("❌ Chyba při načítání knih z Open Library:", error);
+        console.log("🔄 Použijí se fallback obrázky z Unsplash");
+      }
+    };
+
+    loadRealBooks();
+  }, []);
 
   const currentGoal = profile.readingGoals[0];
   const progressPercentage = currentGoal ? (currentGoal.currentBooks / currentGoal.targetBooks) * 100 : 0;
@@ -143,28 +283,56 @@ export const ProfilePage = ({ userId = "current-user" }: ProfilePageProps) => {
     setActiveTab(newValue);
   };
 
-  const addNoteToBook = (bookId: string) => {
-    if (!newNote.trim()) return;
+  // Handler funkce pro BookShelfCard
 
-    const newNoteObj: BookNote = {
+  const handleDeleteWantToRead = (itemId: string) => {
+    setProfile((prev) => ({
+      ...prev,
+      wantToRead: prev.wantToRead.filter((item) => item.id !== itemId),
+    }));
+  };
+
+  const handleMarkAsRead = (item: WantToReadBook) => {
+    // Přesun z "Chci přečíst" do "Přečtené"
+    const newReadBook = {
       id: Date.now().toString(),
-      bookId,
-      note: newNote,
-      rating: newRating || undefined,
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      bookId: item.bookId,
+      bookDetail: item.bookDetail,
+      readAt: new Date(),
+      rating: undefined,
+      notes: [],
+      photos: [],
     };
 
     setProfile((prev) => ({
       ...prev,
-      readBooks: prev.readBooks.map((book) =>
-        book.bookId === bookId ? { ...book, notes: [...book.notes, newNoteObj] } : book,
-      ),
+      wantToRead: prev.wantToRead.filter((i) => i.id !== item.id),
+      readBooks: [...prev.readBooks, newReadBook],
     }));
+  };
 
-    setNewNote("");
-    setNewRating(null);
-    setOpenAddNote(false);
+  const handleDeleteReadBook = (bookId: string) => {
+    setProfile((prev) => ({
+      ...prev,
+      readBooks: prev.readBooks.filter((book) => book.id !== bookId),
+    }));
+  };
+
+  const handleAddNote = (bookId: string) => {
+    console.log("Add note to book:", bookId);
+    // Poznámka se přidává v rozbalovací sekci BookShelfCard
+  };
+
+  const handleAddPhoto = (bookId: string) => {
+    console.log("Add photo to book:", bookId);
+    // TODO: Implementovat upload fotografií
+  };
+
+  const handleRatingChange = (bookId: string, rating: number) => {
+    setProfile((prev) => ({
+      ...prev,
+      readBooks: prev.readBooks.map((book) => (book.id === bookId ? { ...book, rating } : book)),
+    }));
   };
 
   const filteredReadBooks = profile.readBooks.filter(
@@ -332,7 +500,7 @@ export const ProfilePage = ({ userId = "current-user" }: ProfilePageProps) => {
                 <Button
                   variant="contained"
                   startIcon={<Add />}
-                  onClick={() => setOpenAddBook(true)}
+                  onClick={() => console.log("TODO: Přidat vyhledávání knih")}
                   sx={{ borderRadius: 3 }}
                 >
                   Přidat knihu
@@ -352,46 +520,14 @@ export const ProfilePage = ({ userId = "current-user" }: ProfilePageProps) => {
                 }}
               >
                 {profile.wantToRead.map((item) => (
-                  <Card
+                  <BookShelfCard
                     key={item.id}
-                    sx={{
-                      height: "100%",
-                      transition: "all 0.3s ease",
-                      "&:hover": {
-                        transform: "translateY(-8px)",
-                        boxShadow: 6,
-                      },
-                    }}
-                  >
-                    <CardMedia
-                      component="img"
-                      height="200"
-                      image={item.bookDetail.cover?.medium || "https://via.placeholder.com/200x300"}
-                      alt={item.bookDetail.title}
-                      sx={{ objectFit: "cover" }}
-                    />
-                    <CardContent>
-                      <Typography variant="h6" fontWeight="bold" gutterBottom>
-                        {item.bookDetail.title}
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary" gutterBottom>
-                        {item.bookDetail.authors?.name}
-                      </Typography>
-
-                      <Chip
-                        label={item.priority}
-                        size="small"
-                        color={item.priority === "high" ? "error" : item.priority === "medium" ? "warning" : "default"}
-                        sx={{ mb: 1 }}
-                      />
-
-                      {item.comment && (
-                        <Typography variant="body2" sx={{ mt: 1, fontStyle: "italic" }}>
-                          &quot;{item.comment}&quot;
-                        </Typography>
-                      )}
-                    </CardContent>
-                  </Card>
+                    book={item}
+                    status="want-to-read"
+                    onDelete={() => handleDeleteWantToRead(item.id)}
+                    onAddNote={() => handleAddNote(item.bookId)}
+                    onMarkAsRead={() => handleMarkAsRead(item)}
+                  />
                 ))}
               </Box>
             </Box>
@@ -440,170 +576,21 @@ export const ProfilePage = ({ userId = "current-user" }: ProfilePageProps) => {
                 }}
               >
                 {filteredReadBooks.map((book) => (
-                  <Card
+                  <BookShelfCard
                     key={book.id}
-                    sx={{
-                      height: "100%",
-                      transition: "all 0.3s ease",
-                      "&:hover": {
-                        transform: "translateY(-4px)",
-                        boxShadow: 4,
-                      },
-                    }}
-                  >
-                    <Box sx={{ position: "relative" }}>
-                      <CardMedia
-                        component="img"
-                        height="250"
-                        image={book.bookDetail.cover?.medium || "https://via.placeholder.com/200x300"}
-                        alt={book.bookDetail.title}
-                        sx={{ objectFit: "cover" }}
-                      />
-                      {book.rating && (
-                        <Chip
-                          label={`★ ${book.rating}/5`}
-                          sx={{
-                            position: "absolute",
-                            top: 8,
-                            right: 8,
-                            backgroundColor: "#4CAF50",
-                            color: "white",
-                            fontWeight: "bold",
-                          }}
-                        />
-                      )}
-                    </Box>
-
-                    <CardContent>
-                      <Typography variant="h6" fontWeight="bold" gutterBottom>
-                        {book.bookDetail.title}
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary" gutterBottom>
-                        {book.bookDetail.authors?.name}
-                      </Typography>
-
-                      <Typography variant="body2" sx={{ mb: 2 }}>
-                        Přečteno: {book.readAt.toLocaleDateString("cs-CZ")}
-                      </Typography>
-
-                      {/* Notes */}
-                      {book.notes.length > 0 && (
-                        <Box sx={{ mb: 2 }}>
-                          <Typography variant="subtitle2" fontWeight="bold" gutterBottom>
-                            Poznámky ({book.notes.length})
-                          </Typography>
-                          {book.notes.slice(0, 1).map((note) => (
-                            <Typography
-                              key={note.id}
-                              variant="body2"
-                              sx={{
-                                fontStyle: "italic",
-                                backgroundColor: "#f5f5f5",
-                                p: 1,
-                                borderRadius: 1,
-                                fontSize: "0.85rem",
-                              }}
-                            >
-                              {note.note.length > 100 ? `${note.note.substring(0, 100)}...` : note.note}
-                            </Typography>
-                          ))}
-                        </Box>
-                      )}
-
-                      {/* Photos */}
-                      {book.photos.length > 0 && (
-                        <Box sx={{ mb: 2 }}>
-                          <Typography variant="subtitle2" fontWeight="bold" gutterBottom>
-                            Fotografie ({book.photos.length})
-                          </Typography>
-                          <Stack direction="row" spacing={1}>
-                            {book.photos.slice(0, 3).map((photo) => (
-                              <Box
-                                key={photo.id}
-                                component="img"
-                                src={photo.url}
-                                alt={photo.caption}
-                                sx={{
-                                  width: 60,
-                                  height: 60,
-                                  borderRadius: 1,
-                                  objectFit: "cover",
-                                  border: "2px solid #e0e0e0",
-                                }}
-                              />
-                            ))}
-                          </Stack>
-                        </Box>
-                      )}
-
-                      <Button
-                        variant="outlined"
-                        size="small"
-                        startIcon={<Edit />}
-                        onClick={() => {
-                          setSelectedBook(book.bookId);
-                          setOpenAddNote(true);
-                        }}
-                        sx={{ mt: 1 }}
-                      >
-                        Přidat poznámku
-                      </Button>
-                    </CardContent>
-                  </Card>
+                    book={book}
+                    status="read"
+                    onDelete={() => handleDeleteReadBook(book.id)}
+                    onAddNote={() => handleAddNote(book.bookId)}
+                    onAddPhoto={() => handleAddPhoto(book.bookId)}
+                    onRatingChange={(rating) => handleRatingChange(book.id, rating)}
+                  />
                 ))}
               </Box>
             </Box>
           </Box>
         </Fade>
       )}
-
-      {/* Add Note Dialog */}
-      <Dialog open={openAddNote} onClose={() => setOpenAddNote(false)} maxWidth="md" fullWidth>
-        <DialogTitle>
-          Přidat poznámku ke knize
-          <IconButton onClick={() => setOpenAddNote(false)} sx={{ position: "absolute", right: 8, top: 8 }}>
-            <Close />
-          </IconButton>
-        </DialogTitle>
-        <DialogContent>
-          <TextField
-            fullWidth
-            multiline
-            rows={4}
-            label="Poznámka"
-            value={newNote}
-            onChange={(e) => setNewNote(e.target.value)}
-            sx={{ mb: 3, mt: 1 }}
-          />
-          <Typography component="legend" gutterBottom>
-            Hodnocení
-          </Typography>
-          <Rating value={newRating} onChange={(event, newValue) => setNewRating(newValue)} />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setOpenAddNote(false)}>Zrušit</Button>
-          <Button
-            variant="contained"
-            onClick={() => selectedBook && addNoteToBook(selectedBook)}
-            disabled={!newNote.trim()}
-          >
-            Přidat poznámku
-          </Button>
-        </DialogActions>
-      </Dialog>
-
-      {/* Add Book Dialog Placeholder */}
-      <Dialog open={openAddBook} onClose={() => setOpenAddBook(false)} maxWidth="lg" fullWidth>
-        <DialogTitle>Přidat knihu do seznamu</DialogTitle>
-        <DialogContent>
-          <Alert severity="info" sx={{ mb: 2 }}>
-            Zde bude integrace s vyhledáváním knih pro přidání do &quot;Chci přečíst&quot; seznamu.
-          </Alert>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setOpenAddBook(false)}>Zavřít</Button>
-        </DialogActions>
-      </Dialog>
 
       <style jsx global>{`
         @keyframes pulse {
