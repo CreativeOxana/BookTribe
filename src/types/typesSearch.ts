@@ -10,9 +10,11 @@ export type BookSearch = {
   language?: string[];
   key: string;
   cover_i?: number;
+  id: string;
 };
 
 export type BookSearchResponse = {
-  docs: BookSearch[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  docs: any[];
   numFound: number;
 };

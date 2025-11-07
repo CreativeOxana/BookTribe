@@ -16,9 +16,11 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { searchBooks } from "@/fetch/fetchSearchMain";
+import { useApiStore } from "@/store/store";
 import { BookSearch } from "@/types/typesSearch";
 
 export const BookSearchCard = () => {
+  const { createRow, books } = useApiStore();
   const [query, setQuery] = useState("harry potter");
   const [searchResults, setSearchResults] = useState<BookSearch[]>([]);
   const [loading, setLoading] = useState(false);
@@ -30,6 +32,7 @@ export const BookSearchCard = () => {
 
   // Přidat knihu
   const handleAddBook = (bookKey: string, bookTitle: string) => {
+    createRow(bookKey);
     setAddedBooks((prev) => new Set([...prev, bookKey]));
     console.log(`📚 Kniha "${bookTitle}" přidána`);
   };
@@ -145,7 +148,7 @@ export const BookSearchCard = () => {
           </Typography>
           <List sx={{ bgcolor: "background.paper", borderRadius: 1 }}>
             {searchResults.map((book, index) => {
-              const { key, title, author_name = [], first_publish_year } = book;
+              const { key, title, author_name = [], first_publish_year, id } = book;
               const coverSrc = getCoverUrlForBook(book);
               return (
                 <Box key={`${key}-${index}`} sx={{ position: "relative" }}>
@@ -173,14 +176,14 @@ export const BookSearchCard = () => {
                           alignItems: "center",
                         }}
                       >
-                        {!addedBooks.has(key) ? (
+                        {!books.find((book) => book.id === id) ? (
                           <Button
                             variant="contained"
                             size="small"
                             startIcon={<span>➕</span>}
                             onClick={(e) => {
                               e.stopPropagation(); // Zabraňuje kliknuti na rodičovský element
-                              handleAddBook(key, title);
+                              handleAddBook(id, title);
                             }}
                             sx={{
                               minWidth: 90,

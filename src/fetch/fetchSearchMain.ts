@@ -4,7 +4,9 @@ import { validateBookSearch } from "@/utils/validateBookSearch";
 // Hlavní vyhledávací funkce — volá OpenLibrary a validuje výsledky přes validateBookSearch
 export const searchBooks = async (query: string, limit = 10): Promise<BookSearchResponse> => {
   try {
-    const response = await fetch(`https://openlibrary.org/search.json?q=${encodeURIComponent(query)}&limit=${limit}`);
+    const response = await fetch(
+      `https://openlibrary.org/search.json?q=${encodeURIComponent(query)}&limit=${limit}&fields=*&lang=en`,
+    );
 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);

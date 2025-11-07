@@ -3,6 +3,7 @@
 import { AppBar, Container, Stack, Toolbar, Typography } from "@mui/material";
 import { Link as MuiLink } from "@mui/material";
 import Link from "next/link";
+import { ApiStoreProvider } from "@/store/store";
 
 export const Layout = ({
   children,
@@ -10,7 +11,7 @@ export const Layout = ({
   children: React.ReactNode;
 }>) => {
   return (
-    <>
+    <ApiStoreProvider>
       <AppBar position="static" sx={{ background: "linear-gradient(135deg, #023d0fff 0%, #107c22ff 100%)" }}>
         <Container maxWidth="xl">
           <Toolbar disableGutters>
@@ -63,6 +64,6 @@ export const Layout = ({
 
         {children}
       </Container>
-    </>
+    </ApiStoreProvider>
   );
 };
