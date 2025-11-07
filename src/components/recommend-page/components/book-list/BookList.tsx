@@ -1,27 +1,39 @@
-import { Alert, Box, Stack, Chip, Typography, Tabs, Tab, CircularProgress, Paper, Button, Tooltip, Collapse, Divider } from "@mui/material";
 import { BookmarkAdd, CheckCircle, Info } from "@mui/icons-material";
-import { useState, useEffect } from "react";
-import { Book, UserBookRow } from "@/types/typesDetail";
-import { ModalDetail } from "./components/ModalDetail";
+import {
+  Alert,
+  Box,
+  Button,
+  Chip,
+  CircularProgress,
+  Collapse,
+  Divider,
+  Paper,
+  Stack,
+  Tab,
+  Tabs,
+  Tooltip,
+  Typography,
+} from "@mui/material";
+import { useEffect, useState } from "react";
 import { searchBooksByGenre } from "@/fetch/fetchGenre";
 import { searchTopBooks } from "@/fetch/fetchTopBooks";
+import { useApiStore } from "@/store/store";
+import { Book } from "@/types/typesDetail";
 import { BookSearch } from "@/types/typesSearch";
+import { ModalDetail } from "./components/ModalDetail";
 
 // Typy pro kategorie
 type BookCategory = "bestsellers" | "new-releases" | "classics" | "award-winners" | "trending" | "young-adult";
 type Genre = "fantasy" | "romance" | "mystery" | "science-fiction" | "horror" | "biography" | "history";
 
 export const BookList = ({
-  updateRow,
   onAddToWantToRead,
   onAddToRead,
 }: {
-  books: Book[];
-  createRow: (id: string) => void;
-  updateRow: (id: string, value: Partial<UserBookRow>) => void;
   onAddToWantToRead?: (book: BookSearch) => void;
   onAddToRead?: (book: BookSearch) => void;
 }) => {
+  const { updateRow } = useApiStore();
 
   const [selectedBook, setSelectedBook] = useState<Book | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -105,8 +117,6 @@ export const BookList = ({
     loadGenreBooks("fantasy");
   }, []);
 
-
-
   const handleCloseDialog = () => {
     setDialogOpen(false);
     setSelectedBook(null);
@@ -167,12 +177,12 @@ export const BookList = ({
       }}
     >
       {booksData.map((book, index) => {
-        const coverUrl = book.cover_i 
+        const coverUrl = book.cover_i
           ? `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`
           : "https://via.placeholder.com/150x200/e0e0e0/757575?text=📚";
-        
+
         const isExpanded = expandedBook === book.key;
-        
+
         return (
           <Box
             key={`${book.key}-${index}`}
@@ -184,9 +194,9 @@ export const BookList = ({
               borderRadius: 2,
               overflow: "hidden",
               transition: "all 0.3s ease-in-out",
-              "&:hover": { 
+              "&:hover": {
                 transform: isExpanded ? "none" : "translateY(-4px)",
-                boxShadow: 4
+                boxShadow: 4,
               },
               position: "relative",
               backgroundColor: "#e8f5e8",
@@ -225,8 +235,8 @@ export const BookList = ({
             <Box sx={{ p: 2, flex: 1, display: "flex", flexDirection: "column" }}>
               {/* Text sekce */}
               <Box>
-                <Typography 
-                  variant="body1" 
+                <Typography
+                  variant="body1"
                   fontWeight="bold"
                   sx={{
                     overflow: "hidden",
@@ -240,8 +250,8 @@ export const BookList = ({
                 >
                   {book.title}
                 </Typography>
-                <Typography 
-                  variant="body2" 
+                <Typography
+                  variant="body2"
                   color="text.secondary"
                   sx={{
                     overflow: "hidden",
@@ -260,10 +270,10 @@ export const BookList = ({
                   </Typography>
                 )}
               </Box>
-              
+
               {/* Flexibilní prostor */}
               <Box sx={{ flexGrow: 1 }} />
-              
+
               {/* Akční tlačítka - fixně na spodku */}
               <Box>
                 <Stack direction="column" spacing={1} alignItems="center">
@@ -284,13 +294,13 @@ export const BookList = ({
                           "&:hover": {
                             borderColor: "#2E7D32",
                             backgroundColor: "rgba(46, 125, 50, 0.1)",
-                          }
+                          },
                         }}
                       >
                         Chci
                       </Button>
                     </Tooltip>
-                    
+
                     <Tooltip title="Označit jako přečtené">
                       <Button
                         variant="outlined"
@@ -306,14 +316,14 @@ export const BookList = ({
                           "&:hover": {
                             borderColor: "#2196F3",
                             backgroundColor: "rgba(33, 150, 243, 0.1)",
-                          }
+                          },
                         }}
                       >
                         Přečteno
                       </Button>
                     </Tooltip>
                   </Stack>
-                  
+
                   {/* Detail tlačítko - větší a výraznější */}
                   <Tooltip title={isExpanded ? "Zavřít detail" : "Zobrazit detail knihy"}>
                     <Button
@@ -324,7 +334,7 @@ export const BookList = ({
                         e.stopPropagation();
                         handleToggleDetail(book.key);
                       }}
-                      sx={{ 
+                      sx={{
                         backgroundColor: isExpanded ? "#2E7D32" : "#757575",
                         color: "white",
                         fontSize: "0.8rem",
@@ -332,7 +342,7 @@ export const BookList = ({
                         height: "32px",
                         "&:hover": {
                           backgroundColor: isExpanded ? "#1B5E20" : "#424242",
-                        }
+                        },
                       }}
                     >
                       {isExpanded ? "Zavřít" : "Detail"}
@@ -348,17 +358,15 @@ export const BookList = ({
                 <Typography variant="h6" fontWeight="bold" gutterBottom sx={{ color: "#2E7D32" }}>
                   📖 Detail knihy
                 </Typography>
-                
+
                 <Divider sx={{ mb: 2 }} />
-                
+
                 <Stack spacing={1}>
                   <Box>
                     <Typography variant="subtitle2" fontWeight="bold">
                       Název:
                     </Typography>
-                    <Typography variant="body2">
-                      {book.title}
-                    </Typography>
+                    <Typography variant="body2">{book.title}</Typography>
                   </Box>
 
                   {book.author_name && book.author_name.length > 0 && (
@@ -366,9 +374,7 @@ export const BookList = ({
                       <Typography variant="subtitle2" fontWeight="bold">
                         {book.author_name.length > 1 ? "Autoři:" : "Autor:"}
                       </Typography>
-                      <Typography variant="body2">
-                        {book.author_name.join(", ")}
-                      </Typography>
+                      <Typography variant="body2">{book.author_name.join(", ")}</Typography>
                     </Box>
                   )}
 
@@ -377,9 +383,7 @@ export const BookList = ({
                       <Typography variant="subtitle2" fontWeight="bold">
                         První vydání:
                       </Typography>
-                      <Typography variant="body2">
-                        {book.first_publish_year}
-                      </Typography>
+                      <Typography variant="body2">{book.first_publish_year}</Typography>
                     </Box>
                   )}
 
@@ -388,9 +392,7 @@ export const BookList = ({
                       <Typography variant="subtitle2" fontWeight="bold">
                         Jazyky:
                       </Typography>
-                      <Typography variant="body2">
-                        {book.language.join(", ")}
-                      </Typography>
+                      <Typography variant="body2">{book.language.join(", ")}</Typography>
                     </Box>
                   )}
 
@@ -399,9 +401,7 @@ export const BookList = ({
                       <Typography variant="subtitle2" fontWeight="bold">
                         Počet vydání:
                       </Typography>
-                      <Typography variant="body2">
-                        {book.edition_count}
-                      </Typography>
+                      <Typography variant="body2">{book.edition_count}</Typography>
                     </Box>
                   )}
 
@@ -411,10 +411,13 @@ export const BookList = ({
                         Dostupnost e-knihy:
                       </Typography>
                       <Typography variant="body2">
-                        {book.ebook_access === "public" ? "✅ Veřejně dostupná" : 
-                         book.ebook_access === "borrowable" ? "📚 Půjčovatelná" : 
-                         book.ebook_access === "printdisabled" ? "♿ Pro zrakově postižené" : 
-                         book.ebook_access}
+                        {book.ebook_access === "public"
+                          ? "✅ Veřejně dostupná"
+                          : book.ebook_access === "borrowable"
+                            ? "📚 Půjčovatelná"
+                            : book.ebook_access === "printdisabled"
+                              ? "♿ Pro zrakově postižené"
+                              : book.ebook_access}
                       </Typography>
                     </Box>
                   )}
@@ -469,10 +472,12 @@ export const BookList = ({
           <Typography variant="h5" fontWeight="bold" gutterBottom sx={{ mb: 3 }}>
             🎭 Knihy podle žánrů
           </Typography>
-          
+
           {/* Žánrové štítky */}
           <Box sx={{ mb: 4 }}>
-            <Typography variant="h6" gutterBottom>Vyberte žánr:</Typography>
+            <Typography variant="h6" gutterBottom>
+              Vyberte žánr:
+            </Typography>
             <Stack direction="row" spacing={1} flexWrap="wrap" gap={1}>
               {genres.map((genre) => (
                 <Chip
@@ -482,15 +487,15 @@ export const BookList = ({
                   variant={selectedGenre === genre.key ? "filled" : "outlined"}
                   color={selectedGenre === genre.key ? "success" : "default"}
                   onClick={() => handleGenreChange(genre.key)}
-                  sx={{ 
+                  sx={{
                     mb: 1,
                     ...(selectedGenre === genre.key && {
                       backgroundColor: "#2E7D32",
                       color: "white",
                       "&:hover": {
                         backgroundColor: "#1B5E20",
-                      }
-                    })
+                      },
+                    }),
                   }}
                 />
               ))}
@@ -503,7 +508,7 @@ export const BookList = ({
               <CircularProgress />
             </Box>
           )}
-          
+
           {error && (
             <Alert severity="error" sx={{ mb: 3 }}>
               {error}
@@ -512,7 +517,7 @@ export const BookList = ({
 
           {/* Zobrazení knih žánru */}
           {!loading && !error && genreBooks.length > 0 && renderApiBooks(genreBooks)}
-          
+
           {!loading && !error && genreBooks.length === 0 && activeTab === 0 && (
             <Alert severity="info">Pro vybraný žánr nebyly nalezeny žádné knihy.</Alert>
           )}
@@ -525,10 +530,12 @@ export const BookList = ({
           <Typography variant="h5" fontWeight="bold" gutterBottom sx={{ mb: 3 }}>
             🏆 TOP výběry knih
           </Typography>
-          
+
           {/* TOP kategorie */}
           <Box sx={{ mb: 4 }}>
-            <Typography variant="h6" gutterBottom>Vyberte kategorii:</Typography>
+            <Typography variant="h6" gutterBottom>
+              Vyberte kategorii:
+            </Typography>
             <Stack direction="row" spacing={1} flexWrap="wrap" gap={1}>
               {topCategories.map((category) => (
                 <Chip
@@ -538,15 +545,15 @@ export const BookList = ({
                   variant={selectedCategory === category.key ? "filled" : "outlined"}
                   color={selectedCategory === category.key ? "success" : "default"}
                   onClick={() => handleCategoryChange(category.key)}
-                  sx={{ 
+                  sx={{
                     mb: 1,
                     ...(selectedCategory === category.key && {
                       backgroundColor: "#2E7D32",
                       color: "white",
                       "&:hover": {
                         backgroundColor: "#1B5E20",
-                      }
-                    })
+                      },
+                    }),
                   }}
                 />
               ))}
@@ -559,7 +566,7 @@ export const BookList = ({
               <CircularProgress />
             </Box>
           )}
-          
+
           {error && (
             <Alert severity="error" sx={{ mb: 3 }}>
               {error}
@@ -568,7 +575,7 @@ export const BookList = ({
 
           {/* Zobrazení TOP knih */}
           {!loading && !error && topBooks.length > 0 && renderApiBooks(topBooks)}
-          
+
           {!loading && !error && topBooks.length === 0 && activeTab === 1 && (
             <Alert severity="info">Pro vybranou kategorii nebyly nalezeny žádné knihy.</Alert>
           )}

@@ -1,4 +1,5 @@
 import { useLocalStorage } from "usehooks-ts";
+import { createDefaultRow } from "@/store/utils/createDefaultRow";
 import { UserBookRow } from "@/types/typesDetail";
 
 const defaultUserBookRows: Record<string, UserBookRow> = {
@@ -23,11 +24,6 @@ const defaultUserBookRows: Record<string, UserBookRow> = {
   //   isRead: false,
   // },
 };
-
-const createDefaultRow = (id: string): UserBookRow => ({
-  id,
-  isRead: false,
-});
 
 export const useUserBookRows = () => {
   const [userBookRows, setUserBookRows] = useLocalStorage<Record<string, UserBookRow>>(
